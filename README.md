@@ -11,21 +11,21 @@ PHP >= 8.0.2
 
 ## Available functions
 ```php
-waffle_db()
+waffle_db();
 // https://laravel.com/docs/8.x/queries
 
-waffle_request()
+waffle_request();
 // https://laravel.com/docs/8.x/requests
 
-waffle_session()
+waffle_session();
 // https://laravel.com/docs/8.x/session
 
-waffle_cache()
+waffle_cache();
 // https://laravel.com/docs/8.x/cache
 
-waffle_collection()
+waffle_collection();
 // https://laravel.com/docs/8.x/collections
 
-waffle_str()
+waffle_str();
 // https://laravel.com/docs/8.x/helpers#fluent-strings
 ```
