@@ -13,6 +13,6 @@
 
 require_once __DIR__ . '/src/inc/setup.php';
 
-register_activation_hook(__FILE__, function () {
-    require_once __DIR__ . '/src/inc/activation.php';
+register_deactivation_hook(__FILE__, function () {
+    require_once __DIR__ . '/src/inc/deactivation.php';
 });
