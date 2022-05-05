@@ -1,0 +1,44 @@
+{
+  "name": "boxybird/waffle",
+  "description": "Tools built using Illuminate components (https://github.com/illuminate). Inspired by https://github.com/mattstauffer/Torch",
+  "license": "MIT",
+  "keywords": [
+    "wordpress",
+    "illuminate",
+    "laravel",
+    "plugin"
+  ],
+  "authors": [
+    {
+      "name": "Andrew Rhyand",
+      "email": "hello@andrewrhyand.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "BoxyBird\\Waffle\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.0.2",
+    "illuminate/container": "^8.83",
+    "illuminate/support": "^8.83",
+    "illuminate/database": "^8.83",
+    "illuminate/translation": "^8.83",
+    "illuminate/validation": "^8.83",
+    "illuminate/config": "^8.83",
+    "illuminate/http": "^8.83",
+    "illuminate/cache": "^8.83",
+    "illuminate/filesystem": "^8.83",
+    "illuminate/console": "^8.83",
+    "illuminate/encryption": "^8.83",
+    "illuminate/events": "^8.83",
+    "illuminate/queue": "^8.83",
+    "illuminate/contracts": "^8.83",
+    "illuminate/pagination": "^8.83",
+    "illuminate/redis": "^8.83",
+    "predis/predis": "^1.1",
+    "htmlburger/carbon-fields": "^3.3",
+    "filp/whoops": "^2.14"
+  }
+}
