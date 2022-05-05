@@ -28,3 +28,4 @@ waffle_collection()
 
 waffle_str()
 // https://laravel.com/docs/8.x/helpers#fluent-strings
+```
