@@ -40,7 +40,7 @@ if (!function_exists('waffle_config')) {
 if (!function_exists('waffle_validator')) {
     function waffle_validator(array $data, array $rules, array $messages = [], array $customAttributes = [])
     {
-        $default_messages = require __DIR__ . '/config/validation-messages.php';
+        $default_messages = require __DIR__ . '/../config/validation-messages.php';
 
         $messages = array_merge($default_messages, $messages);
 
