@@ -3,6 +3,7 @@
 use BoxyBird\Waffle\App;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Http\Client\Factory;
 
 /**
  * @see BoxyBird\Waffle
@@ -99,5 +100,15 @@ if (!function_exists('waffle_str')) {
     function waffle_str(string $string)
     {
         return Str::of($string);
+    }
+}
+
+/**
+ * @see Illuminate\Support\Str
+ */
+if (!function_exists('waffle_http')) {
+    function waffle_http()
+    {
+        return new Factory();
     }
 }
