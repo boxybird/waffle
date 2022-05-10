@@ -16,6 +16,9 @@ PHP >= 8.0.2
 waffle_db();
 // https://laravel.com/docs/8.x/queries
 
+waffle_validator();
+// https://laravel.com/docs/8.x/validation
+
 waffle_request();
 // https://laravel.com/docs/8.x/requests
 
