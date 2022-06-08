@@ -17,15 +17,15 @@ $app->singleton('validation', function ($app) {
     $validation->setPresenceVerifier($presence);
 
     // Add custom validation rules
-    // $rules = $app->config->get('validation-rules') ?: [];
+    $rules = apply_filters('waffle/validation-rules', $app->config->get('validation-rules'));
 
-    // foreach ($rules as $key => $rule_class) {
-    //     $rule_class = new $rule_class();
+    foreach ($rules as $key => $rule_class) {
+        $rule_class = new $rule_class();
 
-    //     $validation->extend($key, function ($attribute, $value, $parameters, $validator) use ($rule_class) {
-    //         return $rule_class->passes($attribute, $value, $parameters, $validator);
-    //     }, $rule_class->message());
-    // }
+        $validation->extend($key, function ($attribute, $value, $parameters, $validator) use ($rule_class) {
+            return $rule_class->passes($attribute, $value, $parameters, $validator);
+        }, $rule_class->message());
+    }
 
     return $validation;
 });

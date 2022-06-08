@@ -15,7 +15,7 @@ $defaults = [
     'connection'      => 'default',
 ];
 
-return array_merge(apply_filters('waffle_session_config', $defaults), [
+return array_merge(apply_filters('waffle/session_config', $defaults), [
     'driver' => 'database',
     'table'  => 'waffle_sessions',
 ]);
