@@ -1,6 +1,6 @@
 <?php
 
-return [
+$defaults = [
     'lifetime'        => 120,
     'prefix'          => '',
     'path'            => '/',
@@ -11,8 +11,11 @@ return [
     'raw'             => false,
     'lottery'         => [2, 100],
     'cookie'          => 'waffle_session',
-    'driver'          => 'database',
     'expire_on_close' => false,
-    'table'           => 'waffle_sessions',
     'connection'      => 'default',
 ];
+
+return array_merge(apply_filters('waffle_session_config', $defaults), [
+    'driver' => 'database',
+    'table'  => 'waffle_sessions',
+]);
