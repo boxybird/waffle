@@ -17,8 +17,8 @@ $waffle_app->singleton('session', function ($waffle_app) {
     }
 
     // Create the session table if it doesn't exist.
-    if (!get_transient('waffle_sessions_table_exists')) {
-        set_transient('waffle_sessions_table_exists', true);
+    if (!get_option('waffle_sessions_table_exists')) {
+        update_option('waffle_sessions_table_exists', true, true);
 
         // Double check if session table doesn't
         // exist as transient may be manually deleted.
