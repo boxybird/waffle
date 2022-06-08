@@ -20,7 +20,6 @@
     }
   },
   "require": {
-    "php": ">=8.0.2",
     "guzzlehttp/guzzle": "^6.5.5 || ^7.0.1",
     "illuminate/container": "^8.83",
     "illuminate/support": "^8.83",

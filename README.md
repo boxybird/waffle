@@ -4,12 +4,6 @@
 
 Clone or download as a plugin and run `composer install` before activating in WordPress Admin.
 
-## Requirements
-
-```
-PHP >= 8.0.2
-```
-
 ## Available functions
 
 ```php
