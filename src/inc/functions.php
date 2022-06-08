@@ -94,7 +94,7 @@ if (!function_exists('waffle_collection')) {
 }
 
 /**
- * @see Illuminate\Support\Str
+ * @see \Illuminate\Support\Stringable
  */
 if (!function_exists('waffle_str')) {
     function waffle_str(string $string)
