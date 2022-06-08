@@ -104,7 +104,7 @@ if (!function_exists('waffle_str')) {
 }
 
 /**
- * @see Illuminate\Support\Str
+ * @see Illuminate\Http\Client\Factory
  */
 if (!function_exists('waffle_http')) {
     function waffle_http()
