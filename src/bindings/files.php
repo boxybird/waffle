@@ -5,6 +5,6 @@ use Illuminate\Filesystem\Filesystem;
 /**
  * Bind files instance to container
  */
-$app->singleton('files', function ($app) {
+$waffle_app->singleton('files', function ($waffle_app) {
     return new Filesystem;
 });

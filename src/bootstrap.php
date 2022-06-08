@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 /**
  * Get the instance of the App class.
  */
-$app = App::getInstance();
+$waffle_app = App::getInstance();
 
 /**
  * Require config binding
@@ -62,9 +62,9 @@ require_once __DIR__ . '/inc/carbon.php';
 /**
  * Defer creating and sending session cookie until WordPress is ready
  */
-add_action('send_headers', function () use ($app) {
-    $config = $app->get('config');
-    $session_manager = $app->get('session');
+add_action('send_headers', function () use ($waffle_app) {
+    $config = $waffle_app->get('config');
+    $session_manager = $waffle_app->get('session');
 
     $cookie = new Cookie(
         $session_manager->getName(),
@@ -92,6 +92,6 @@ add_action('send_headers', function () use ($app) {
 /**
  * Defer saving session until last possible moment
  */
-add_action('wp_footer', function () use ($app) {
-    $app->get('session')->save();
+add_action('wp_footer', function () use ($waffle_app) {
+    $waffle_app->get('session')->save();
 }, PHP_INT_MAX);

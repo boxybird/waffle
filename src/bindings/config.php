@@ -5,7 +5,7 @@ use Illuminate\Config\Repository;
 /**
  * Bind config instance to container
  */
-$app->singleton('config', function () {
+$waffle_app->singleton('config', function () {
     $files = [];
 
     foreach (glob(__DIR__ . '/../config/*.php') as $file) {

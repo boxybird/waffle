@@ -5,7 +5,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 /**
  * Bind database instance to container
  */
-$app->singleton('db', function () {
+$waffle_app->singleton('db', function () {
     $capsule = new Capsule;
 
     $capsule->addConnection([

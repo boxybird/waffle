@@ -5,8 +5,8 @@ use Illuminate\Session\SessionManager;
 /**
  * Bind session instance to container
  */
-$app->singleton('session', function ($app) {
-    $session_manager = new SessionManager($app);
+$waffle_app->singleton('session', function ($waffle_app) {
+    $session_manager = new SessionManager($waffle_app);
 
     $cookie_name = $session_manager->getName();
 
