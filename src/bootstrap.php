@@ -50,6 +50,11 @@ require __DIR__ . '/bindings/validation.php';
 require __DIR__ . '/bindings/request.php';
 
 /**
+ * Require the encrypter binding
+ */
+require __DIR__ . '/bindings/encrypter.php';
+
+/**
  * Require helper functions
 */
 require_once __DIR__ . '/inc/functions.php';

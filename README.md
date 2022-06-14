@@ -30,6 +30,9 @@ waffle_collection();
 
 waffle_str();
 // https://laravel.com/docs/8.x/helpers#fluent-strings
+
+waffle_encrypter();
+// https://laravel.com/docs/8.x/encryption
 ```
 
 ## Usage examples
@@ -83,4 +86,16 @@ $validator = waffle_validator($data,
         'age.min' => 'Not old enough', // Custom error message for age.min
     ]
 );
+```
+
+```php
+<?php
+
+// Add to wp-config.php
+define('WAFFLE_ENCRYPTER_KEY', 'REPLACE_WITH_SOME_16_CHARACTER_STRING');
+
+// Example usage
+$encrypted = waffle_encrypter()->encrypt('Some secret');
+
+$decrypted = waffle_encrypter()->decrypt($encrypted);
 ```

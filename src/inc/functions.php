@@ -112,3 +112,13 @@ if (!function_exists('waffle_http')) {
         return new Factory();
     }
 }
+
+/**
+ * @see Illuminate\Encryption\Encrypter;
+ */
+if (!function_exists('waffle_encrypter')) {
+    function waffle_encrypter()
+    {
+        return App::getInstance()->make('encrypter');
+    }
+}
