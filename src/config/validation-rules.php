@@ -1,5 +1,5 @@
 <?php
 
 return [
-    // 'verify_nonce' => VerifyNonce::class,
+    'verify_nonce' => \BoxyBird\Waffle\Rules\VerifyNonce::class,
 ];
