@@ -2,7 +2,13 @@
 
 ## Installation
 
-Clone or download as a plugin and run `composer install` before activating in WordPress Admin.
+Option 1: Install the package via composer. (**Recommended**)
+
+```
+composer require boxybird/waffle
+```
+
+Option 2: Clone or download as a plugin and run `composer install` before activating in WordPress Admin.
 
 ## Available functions
 
