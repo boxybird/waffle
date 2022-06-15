@@ -19,7 +19,7 @@
       "BoxyBird\\Waffle\\": "src/"
     },
     "files": [
-      "waffle.php"
+      "src/bootstrap.php"
     ]
   },
   "require": {
