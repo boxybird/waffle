@@ -19,7 +19,7 @@
       "BoxyBird\\Waffle\\": "src/"
     },
     "files": [
-      "src/functions.php"
+      "waffle.php"
     ]
   },
   "require": {
