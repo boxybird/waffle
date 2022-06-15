@@ -1,11 +1,12 @@
 <?php
 
+use BoxyBird\Waffle\App;
 use Illuminate\Config\Repository;
 
 /**
  * Bind config instance to container
  */
-$waffle_app->singleton('config', function () {
+App::getInstance()->singleton('config', function () {
     $files = [];
 
     foreach (glob(__DIR__ . '/../config/*.php') as $file) {

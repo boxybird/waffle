@@ -1,11 +1,12 @@
 <?php
 
+use BoxyBird\Waffle\App;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 /**
  * Bind database instance to container
  */
-$waffle_app->singleton('db', function () {
+App::getInstance()->singleton('db', function () {
     $capsule = new Capsule;
 
     $capsule->addConnection([

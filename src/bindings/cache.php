@@ -1,7 +1,8 @@
 <?php
 
+use BoxyBird\Waffle\App;
 use Illuminate\Cache\CacheManager;
 
-$waffle_app->singleton('cache', function () use ($waffle_app) {
-    return new CacheManager($waffle_app);
+App::getInstance()->singleton('cache', function ($app) {
+    return new CacheManager($app);
 });

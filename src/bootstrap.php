@@ -1,14 +1,5 @@
 <?php
 
-use BoxyBird\Waffle\App;
-use Illuminate\Contracts\Auth\Guard;
-use Symfony\Component\HttpFoundation\Cookie;
-
-/**
- * Get the instance of the App class.
- */
-$waffle_app = App::getInstance();
-
 /**
  * Require config binding
  */
@@ -67,11 +58,13 @@ require_once __DIR__ . '/inc/carbon.php';
 /**
  * Defer creating and sending session cookie until WordPress is ready
  */
-add_action('send_headers', function () use ($waffle_app) {
-    $config = $waffle_app->get('config');
-    $session_manager = $waffle_app->get('session');
+add_action('send_headers', function () {
+    $app = BoxyBird\Waffle\App::getInstance();
 
-    $cookie = new Cookie(
+    $config = $app->get('config');
+    $session_manager = $app->get('session');
+
+    $cookie = new Symfony\Component\HttpFoundation\Cookie(
         $session_manager->getName(),
         $session_manager->getId(),
         time() + ($config->get('session.lifetime', 120) * 60),
@@ -97,6 +90,8 @@ add_action('send_headers', function () use ($waffle_app) {
 /**
  * Defer saving session until last possible moment
  */
-add_action('wp_footer', function () use ($waffle_app) {
-    $waffle_app->get('session')->save();
+add_action('wp_footer', function () {
+    $app = BoxyBird\Waffle\App::getInstance();
+
+    $app->get('session')->save();
 }, PHP_INT_MAX);

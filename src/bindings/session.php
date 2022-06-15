@@ -1,12 +1,13 @@
 <?php
 
+use BoxyBird\Waffle\App;
 use Illuminate\Session\SessionManager;
 
 /**
  * Bind session instance to container
  */
-$waffle_app->singleton('session', function ($waffle_app) {
-    $session_manager = new SessionManager($waffle_app);
+App::getInstance()->singleton('session', function ($app) {
+    $session_manager = new SessionManager($app);
 
     $cookie_name = $session_manager->getName();
 

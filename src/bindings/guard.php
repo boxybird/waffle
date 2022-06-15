@@ -1,8 +1,9 @@
 <?php
 
+use BoxyBird\Waffle\App;
 use Illuminate\Contracts\Auth\Guard;
 use BoxyBird\Waffle\Guard as WaffleGuard;
 
-$waffle_app->singleton(Guard::class, function ($waffle_app) {
+App::getInstance()->singleton(Guard::class, function () {
     return new WaffleGuard();
 });

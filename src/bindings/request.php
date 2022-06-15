@@ -1,13 +1,13 @@
 <?php
 
+use BoxyBird\Waffle\App;
 use Illuminate\Http\Request;
 
 /**
  * Create a request from server variables, and bind it to the container; optional
  */
-$request = Request::capture();
-$waffle_app->instance('Illuminate\Http\Request', $request);
+App::getInstance()->instance('Illuminate\Http\Request', Request::capture());
 
-$waffle_app->singleton('request', function () use ($request) {
-    return $request;
+App::getInstance()->singleton('request', function ($app) {
+    return $app->get('Illuminate\Http\Request');
 });
