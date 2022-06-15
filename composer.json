@@ -17,7 +17,10 @@
   "autoload": {
     "psr-4": {
       "BoxyBird\\Waffle\\": "src/"
-    }
+    },
+    "files": [
+      "src/functions.php"
+    ]
   },
   "require": {
     "guzzlehttp/guzzle": "^6.5.5 || ^7.0.1",
