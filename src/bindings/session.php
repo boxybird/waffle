@@ -23,8 +23,8 @@ App::getInstance()->singleton('session', function ($app) {
 
         // Double check if session table doesn't
         // exist as transient may be manually deleted.
-        if (!waffle_db()->schema()->hasTable('waffle_sessions')) {
-            waffle_db()->schema()->create('waffle_sessions', function ($table) {
+        if (!$app->get('db')->schema()->hasTable('waffle_sessions')) {
+            $app->get('db')->schema()->create('waffle_sessions', function ($table) {
                 $table->string('id')->primary();
                 $table->foreignId('user_id')->nullable()->index();
                 $table->string('ip_address', 45)->nullable();
