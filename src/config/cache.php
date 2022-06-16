@@ -1,13 +1,12 @@
 <?php
 
 return [
-    'default' => 'file',
+    'default' => 'database',
     'ttl'     => 3600,
-    'prefix'  => 'waffle',
     'stores'  => [
-        'file' => [
-            'driver' => 'file',
-            'path'   => WP_CONTENT_DIR . '/waffle-cache',
+        'database' => [
+            'driver' => 'database',
+            'table'  => 'waffle_cache',
         ],
     ],
 ];
