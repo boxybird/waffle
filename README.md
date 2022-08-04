@@ -31,6 +31,9 @@ waffle_session();
 waffle_cache();
 // https://laravel.com/docs/8.x/cache
 
+waffle_storage();
+// https://laravel.com/docs/8.x/filesystem
+
 waffle_collection();
 // https://laravel.com/docs/8.x/collections
 

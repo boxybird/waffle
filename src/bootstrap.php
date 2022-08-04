@@ -11,6 +11,11 @@ require __DIR__ . '/bindings/config.php';
 require __DIR__ . '/bindings/files.php';
 
 /**
+ * Require files storage binding
+ */
+require __DIR__ . '/bindings/storage.php';
+
+/**
  * Require the guard binding
  */
 require __DIR__ . '/bindings/guard.php';

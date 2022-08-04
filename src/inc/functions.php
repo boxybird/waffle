@@ -122,3 +122,13 @@ if (!function_exists('waffle_encrypter')) {
         return App::getInstance()->make('encrypter');
     }
 }
+
+/**
+ * @see Illuminate\Filesystem\FilesystemManager;
+ */
+if (!function_exists('waffle_storage')) {
+    function waffle_storage()
+    {
+        return App::getInstance()->make('storage');
+    }
+}
