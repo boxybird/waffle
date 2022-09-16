@@ -2,6 +2,7 @@
 
 namespace BoxyBird\Waffle;
 
+use Exception;
 use BoxyBird\Waffle\App;
 use Illuminate\Queue\WorkerOptions;
 use Illuminate\Queue\MaxAttemptsExceededException;
@@ -95,6 +96,8 @@ class Worker
             $this->worker->daemon('default', $this->queue, $worker_options);
         } catch (MaxAttemptsExceededException $e) {
             $this->handleMaxAttemptsExceededException($e);
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 
