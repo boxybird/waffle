@@ -12,40 +12,79 @@ Option 2: Clone or download as a plugin and run `composer install` before activa
 
 ## Available functions
 
+[waffle_queue](#waffle_queue-waffle_worker)
+[waffle_worker](#waffle_queue-waffle_worker)
+[waffle_db](#waffle_db)
+[waffle_validator](#waffle_validator)
+[waffle_encrypter](#waffle_encrypter)
+[waffle_http](#waffle_http)
+[waffle_cache](#waffle_cache)
+[waffle_session](#waffle_session)
+[waffle_storage](#waffle_storage)
+[waffle_request](#waffle_request)
+[waffle_collection](#waffle_collection)
+[waffle_str](#waffle_str)
+
+---
+
+### waffle_queue / waffle_worker
 ```php
-waffle_db();
-// https://laravel.com/docs/8.x/queries
+<?php
 
-waffle_validator();
-// https://laravel.com/docs/8.x/validation
+// Define a job class
+class LongRunningJob
+{
+    public function fire($job, $data)
+    {
+        // Simulate a long running job
+        sleep($data['how_long']);
 
-waffle_request();
-// https://laravel.com/docs/8.x/requests
+        $failed = false;
 
-waffle_http();
-// https://laravel.com/docs/8.x/http-client
+        // If $failed === true release the job back to the queue to try 
+        // again based on waffle_worker()->setOptions(['maxTries' => 3 // default is 1])
+        // Failed jobs are caught stored in the database and can be
+        // viewed in the admin (/wp-admin/tools.php?page=waffle-options.php)
+        if ($failed) {
+            $job->release();
+        }
 
-waffle_session();
-// https://laravel.com/docs/8.x/session
+        // Delete the job from the queue if it succeeds
+        $job->delete();
+    }
+}
 
-waffle_cache();
-// https://laravel.com/docs/8.x/cache
+// Push a job onto the default queue
+waffle_queue()->push(LongRunningJob::class, ['how_long' => 5]);
 
-waffle_storage();
-// https://laravel.com/docs/8.x/filesystem
+// Run the default queue worker in the background
+waffle_worker()->work();
 
-waffle_collection();
-// https://laravel.com/docs/8.x/collections
+// Push a job onto a custom queue
+waffle_queue()->push(LongRunningJob::class, ['how_long' => 5], 'my_custom_queue');
 
-waffle_str();
-// https://laravel.com/docs/8.x/helpers#fluent-strings
+// Run the custom queue worker in the background
+waffle_worker('my_custom_queue')->work();
 
-waffle_encrypter();
-// https://laravel.com/docs/8.x/encryption
+// Run a queue worker in the background with overridden options
+waffle_worker()->setOptions([
+    'memory'   => 256, // default is 128 (MB)
+    'timeout'  => 120, // default is 60 (server timeout/worker timeout)
+    'sleep'    => 3, // default is 0 (seconds to sleep after each job)
+    'maxTries' => 3, // default is 1 (number of times to try a job before failing)
+    'maxJobs'  => 3, // default is 0 "unlimited" (number of jobs to process before stopping)
+    'maxTime'  => 60, // default is 60 (number of seconds to process before stopping)        
+])->work();
+
+// Notes on setOptions(): 
+// Both 'timeout' and 'maxTime' work hand in hand as 
+// exceptions are thrown if either exceeds server timeout
 ```
+---
 
-## Usage examples
+### waffle_db
 
+Reference: https://laravel.com/docs/8.x/queries
 ```php
 <?php
 
@@ -76,6 +115,9 @@ $query = waffle_db()
     ->get();
 ```
 
+### waffle_validator
+
+Reference: // https://laravel.com/docs/8.x/validation
 ```php
 <?php
 
@@ -97,6 +139,9 @@ $validator = waffle_validator($data,
 );
 ```
 
+## waffle_encrypter
+
+Reference: https://laravel.com/docs/8.x/encryption
 ```php
 <?php
 
@@ -107,4 +152,67 @@ define('WAFFLE_ENCRYPTER_KEY', 'REPLACE_WITH_SOME_16_CHARACTER_STRING');
 $encrypted = waffle_encrypter()->encrypt('Some secret');
 
 $decrypted = waffle_encrypter()->decrypt($encrypted);
+```
+
+## waffle_http
+
+Reference: https://laravel.com/docs/8.x/http-client
+```php
+<?php
+
+// Example coming soon...
+```
+
+## waffle_cache
+
+Reference: https://laravel.com/docs/8.x/cache
+```php
+<?php
+
+// Example coming soon...
+```
+
+## waffle_session
+
+Reference: https://laravel.com/docs/8.x/session
+```php
+<?php
+
+// Example coming soon...
+```
+
+## waffle_storage
+
+Reference: https://laravel.com/docs/8.x/filesystem
+```php
+<?php
+
+// Example coming soon...
+```
+
+## waffle_request
+
+Reference: https://laravel.com/docs/8.x/requests
+```php
+<?php
+
+// Example coming soon...
+```
+
+## waffle_collection
+
+Reference: https://laravel.com/docs/8.x/collections
+```php
+<?php
+
+// Example coming soon...
+```
+
+## waffle_str
+
+Reference: https://laravel.com/docs/8.x/helpers#fluent-strings
+```php
+<?php
+
+// Example coming soon...
 ```
