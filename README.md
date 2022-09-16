@@ -45,6 +45,11 @@ Option 2: Clone or download as a plugin and run `composer install` before activa
 // Define a job class
 class LongRunningJob
 {
+    /**
+     * Handle the job. 
+     * 
+     * **Required method**
+     */
     public function fire($job, $data)
     {
         // Simulate a long running job
