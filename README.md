@@ -12,17 +12,28 @@ Option 2: Clone or download as a plugin and run `composer install` before activa
 
 ## Available functions
 
-[waffle_queue](#waffle_queue-waffle_worker)
-[waffle_worker](#waffle_queue-waffle_worker)
+[waffle_queue](#waffle_queue--waffle_worker)
+
+[waffle_worker](#waffle_queue--waffle_worker)
+
 [waffle_db](#waffle_db)
+
 [waffle_validator](#waffle_validator)
+
 [waffle_encrypter](#waffle_encrypter)
+
 [waffle_http](#waffle_http)
+
 [waffle_cache](#waffle_cache)
+
 [waffle_session](#waffle_session)
+
 [waffle_storage](#waffle_storage)
+
 [waffle_request](#waffle_request)
+
 [waffle_collection](#waffle_collection)
+
 [waffle_str](#waffle_str)
 
 ---
