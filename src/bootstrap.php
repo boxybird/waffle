@@ -6,6 +6,11 @@
 require __DIR__ . '/bindings/config.php';
 
 /**
+ * Require exception handler binding
+ */
+require __DIR__ . '/bindings/exception-handler.php';
+
+/**
  * Require files binding
  */
 require __DIR__ . '/bindings/files.php';
@@ -24,6 +29,21 @@ require __DIR__ . '/bindings/guard.php';
  * Require database binding
  */
 require __DIR__ . '/bindings/db.php';
+
+/**
+ * Require event binding
+ */
+require __DIR__ . '/bindings/events.php';
+
+/**
+ * Require queue binding
+ */
+require __DIR__ . '/bindings/queue.php';
+
+/**
+ * Require worker binding
+ */
+require __DIR__ . '/bindings/worker.php';
 
 /**
  * Require cache binding
