@@ -59,7 +59,7 @@ class LongRunningJob
 
         // If $failed === true release the job back to the queue to try 
         // again based on waffle_worker()->setOptions(['maxTries' => 3 // default is 1])
-        // Failed jobs are caught stored in the database and can be
+        // Failed jobs are caught and stored in the database and can be
         // viewed in the admin (/wp-admin/tools.php?page=waffle-options.php)
         if ($failed) {
             $job->release();
