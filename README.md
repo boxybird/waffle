@@ -251,7 +251,7 @@ if (waffle_session()->has('status')) {
     echo waffle_session()->get('status');
 }
 
-// Handle form submission...
+// Handle example form submission...
 // Store items in the session for the next request only
 waffle_session()->flash('message', 'Thanks for signing up!');
 
