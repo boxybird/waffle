@@ -278,7 +278,7 @@ $disk = waffle_storage()->build([
 $disk->put('custom-folder/hello-world.txt', 'Hello World');
 
 // https://example.test/wp-content/uploads/custom-folder/hello-world.txt
-$url = $disk->url('custom-folder/hello-world.txt');;
+$url = $disk->url('custom-folder/hello-world.txt');
 
 // -----
 
