@@ -16,6 +16,8 @@ App::getInstance()->singleton('cache', function ($app) {
                 $table->text('value');
                 $table->integer('expiration');
             });
+
+            update_option('waffle_cache_table_exists', true, true);
         }
     }
 

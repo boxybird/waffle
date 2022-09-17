@@ -52,9 +52,10 @@ class LongRunningJob
      */
     public function fire($job, $data)
     {
-        // Simulate a long running job
+        // Simulate long running code
         sleep($data['how_long']);
 
+        // Something may or may not have gone wrong
         $failed = false;
 
         // If $failed === true release the job back to the queue to try 

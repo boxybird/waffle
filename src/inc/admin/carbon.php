@@ -29,6 +29,8 @@ Container::make('theme_options', __('Waffle'))
                             $table->timestamp('failed_at')->useCurrent();
                         });
                     }
+                    
+                    update_option('waffle_queue_logs_table_exists', true, true);
                 }
 
                 if (isset($_POST['waffle_queue_logs_delete'])

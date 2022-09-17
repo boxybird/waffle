@@ -7,18 +7,8 @@ use Illuminate\Session\SessionManager;
  * Bind session instance to container
  */
 App::getInstance()->singleton('session', function ($app) {
-    $session_manager = new SessionManager($app);
-
-    $cookie_name = $session_manager->getName();
-
-    if (isset($_COOKIE[$cookie_name])) {
-        if ($session_id = $_COOKIE[$cookie_name]) {
-            $session_manager->setId($session_id);
-        }
-    }
-
-    // Create the session table if it doesn't exist.
-    if (!get_option('waffle_sessions_table_exists')) {
+     // Create the session table if it doesn't exist.
+     if (!get_option('waffle_sessions_table_exists')) {
         update_option('waffle_sessions_table_exists', true, true);
 
         // Double check if session table doesn't
@@ -32,6 +22,18 @@ App::getInstance()->singleton('session', function ($app) {
                 $table->text('payload');
                 $table->integer('last_activity')->index();
             });
+
+            update_option('waffle_sessions_table_exists', true, true);
+        }
+    }
+
+    $session_manager = new SessionManager($app);
+
+    $cookie_name = $session_manager->getName();
+
+    if (isset($_COOKIE[$cookie_name])) {
+        if ($session_id = $_COOKIE[$cookie_name]) {
+            $session_manager->setId($session_id);
         }
     }
 

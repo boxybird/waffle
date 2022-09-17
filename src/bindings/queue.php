@@ -22,6 +22,8 @@ App::getInstance()->singleton('queue', function ($app) {
                 $table->unsignedInteger('available_at');
                 $table->unsignedInteger('created_at');
             });
+
+            update_option('waffle_queue_table_exists', true, true);
         }
     }
 
