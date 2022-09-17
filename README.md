@@ -89,7 +89,7 @@ waffle_worker()->setOptions([
     'sleep'    => 3, // default is 0 (seconds to sleep after each job)
     'maxTries' => 3, // default is 1 (number of times to try a job before failing)
     'maxJobs'  => 3, // default is 0 "unlimited" (number of jobs to process before stopping)
-    'maxTime'  => 60, // default is 60 (number of seconds to process before stopping)        
+    'maxTime'  => 60, // default is 60 (number of seconds to process each job before stopping)        
 ])->work();
 
 // Notes on setOptions(): 
