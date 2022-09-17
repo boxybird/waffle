@@ -94,8 +94,7 @@ waffle_worker()->setOptions([
 ])->work();
 
 // Notes on setOptions(): 
-// Both 'timeout' and 'maxTime' work hand in hand as 
-// exceptions are thrown if either exceeds server timeout
+// Both 'timeout' and 'maxTime' work hand in hand as exceptions are thrown if either exceeds server timeout
 ```
 ---
 
