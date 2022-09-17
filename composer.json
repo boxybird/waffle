@@ -48,6 +48,7 @@
     "predis/predis": "^1.1",
     "htmlburger/carbon-fields": "^3.3",
     "filp/whoops": "^2.14",
-    "league/flysystem": "^1.1"
+    "league/flysystem": "^1.1",
+    "league/flysystem-aws-s3-v3": "^1.0"
   }
 }

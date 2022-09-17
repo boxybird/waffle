@@ -177,7 +177,24 @@ Reference: https://laravel.com/docs/8.x/http-client
 ```php
 <?php
 
-// Example coming soon...
+// GET
+$response = waffle_http()->get('https://rickandmortyapi.com/api/character');
+
+if ($response->failed()) {
+    // Handle error
+}
+
+$data = $response->json();
+
+// POST
+$response = waffle_http()
+    ->withHeaders([
+        'Bearer' => 'SOME_TOKEN',
+    ])
+    ->post('https://example.test/create', [
+        'name'   => 'John Doe',
+        'status' => 'active',
+    ]);
 ```
 
 ## waffle_cache
@@ -186,7 +203,38 @@ Reference: https://laravel.com/docs/8.x/cache
 ```php
 <?php
 
-// Example coming soon...
+// Cache forever, or until the cache is flushed
+waffle_cache()->put('foo', 'bar');
+
+// Cache for 60 seconds
+waffle_cache()->put('foo', 'bar', 60);
+
+// Get cached value
+$foo = waffle_cache()->get('foo');
+
+// Flush the cache
+waffle_cache()->flush();
+
+// -----
+
+// Practical example
+$query = new WP_Query([
+    // SOME EXPENSIVE QUERY ARGS
+]);
+
+// Cache the query results for 1 hour. If the hour is up, the query will be run again.
+$posts = waffle_cache()->remember('posts', HOUR_IN_SECONDS, function () use ($query) {
+    return $query->get_posts();
+});
+
+// Flush the cache on some action
+add_action('save_post', function ($post_id) {
+    // Flush the entire cache
+    waffle_cache()->flush();
+
+    // Flush a specific key
+    waffle_cache()->forget('posts');
+});
 ```
 
 ## waffle_session
@@ -195,7 +243,23 @@ Reference: https://laravel.com/docs/8.x/session
 ```php
 <?php
 
-// Example coming soon...
+// Handle logic to determine 'status' of the user
+// Store items in the session
+waffle_session()->put('status', $active);
+
+// Retrieve an item from the session if it exists
+if (waffle_session()->has('status')) {
+    echo waffle_session()->get('status');
+}
+
+// Handle form submission...
+// Store items in the session for the next request only
+waffle_session()->flash('message', 'Thanks for signing up!');
+
+// Retrieve a flash message if it exists
+if (waffle_session()->has('message')) {
+    echo waffle_session()->get('message');
+}
 ```
 
 ## waffle_storage
@@ -204,7 +268,34 @@ Reference: https://laravel.com/docs/8.x/filesystem
 ```php
 <?php
 
-// Example coming soon...
+// LOCAL
+$disk = waffle_storage()->build([
+    'driver' => 'local',
+    'root'   => wp_upload_dir()['basedir'],
+    'url'    => wp_upload_dir()['baseurl'],
+]);
+
+// /wp-content/uploads/custom-folder/hello-world.txt
+$disk->put('custom-folder/hello-world.txt', 'Hello World');
+
+// https://example.test/wp-content/uploads/custom-folder/hello-world.txt
+$url = $disk->url('custom-folder/hello-world.txt');;
+
+// -----
+
+// AMAZON S3
+$disk = waffle_storage()->build([
+    'driver' => 's3',
+    'key'    => 'YOUR_KEY',
+    'secret' => 'YOUR_SECRET',
+    'region' => 'YOUR_REGION',
+    'bucket' => 'YOUR_BUCKET',
+]);
+
+$disk->put('hello-world.txt', 'Hello World', 'public');
+
+// https://YOUR_BUCKET.s3.amazonaws.com/hello-world.txt
+$url = $disk->url('hello-world.txt');
 ```
 
 ## waffle_request
@@ -213,7 +304,19 @@ Reference: https://laravel.com/docs/8.x/requests
 ```php
 <?php
 
-// Example coming soon...
+// https://example.com?first_name=Jane&last_name=Doe&age=40
+
+$params = waffle_request()->input(); 
+// [
+//     'first_name' => 'Jane',
+//     'last_name' => 'Doe',
+//     'age' => 40
+// ];
+
+$first_name = waffle_request()->only(['first_name']);
+// [
+//     'first_name' => 'Jane',
+// ];
 ```
 
 ## waffle_collection
@@ -222,7 +325,16 @@ Reference: https://laravel.com/docs/8.x/collections
 ```php
 <?php
 
-// Example coming soon...
+$posts = waffle_collection(get_posts())
+    ->map(function ($item) {
+        return [
+            'id'    => $item->ID,
+            'title' => get_the_title($item->ID),
+            'url'   => get_permalink($item->ID),
+            'image' => get_the_post_thumbnail_url($item->ID),
+        ];
+    })
+    ->toArray();
 ```
 
 ## waffle_str
@@ -231,5 +343,10 @@ Reference: https://laravel.com/docs/8.x/helpers#fluent-strings
 ```php
 <?php
 
-// Example coming soon...
+$string = waffle_str('hello world')
+    ->replace('world', 'universe')
+    ->snake()
+    ->upper();
+
+echo $string; // HELLO_UNIVERSE
 ```
