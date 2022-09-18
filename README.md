@@ -216,13 +216,12 @@ waffle_cache()->flush();
 
 // -----
 
-// Practical example
-$query = new WP_Query([
-    // SOME EXPENSIVE QUERY ARGS
-]);
-
 // Cache the query results for 1 hour. If the hour is up, the query will be run again.
-$posts = waffle_cache()->remember('posts', HOUR_IN_SECONDS, function () use ($query) {
+$posts = waffle_cache()->remember('posts', HOUR_IN_SECONDS, function () {
+    $query = new WP_Query([
+        // SOME EXPENSIVE QUERY ARGS
+    ]);
+
     return $query->get_posts();
 });
 
