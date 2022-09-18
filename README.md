@@ -86,11 +86,11 @@ waffle_worker('my_custom_queue')->work();
 // Run a queue worker in the background with overridden options
 waffle_worker()->setOptions([
     'memory'   => 256, // default is 128 (MB)
-    'timeout'  => 120, // default is 60 (server timeout/worker timeout)
     'sleep'    => 3, // default is 0 (seconds to sleep after each job)
     'maxTries' => 3, // default is 1 (number of times to try a job before failing)
     'maxJobs'  => 3, // default is 0 "unlimited" (number of jobs to process before stopping)
-    'maxTime'  => 60, // default is 60 (number of seconds to process each job before stopping)        
+    'maxTime'  => 90, // default is 60 (number of seconds to process each job before stopping)        
+    'timeout'  => 120, // Attempts to default to 80% of the servers max_execution_time, else default is 60 seconds (server timeout/worker timeout)
 ])->work();
 
 // Notes on setOptions(): 
