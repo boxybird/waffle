@@ -14,11 +14,13 @@ class Worker extends QueueWorker
 {
     protected $app;
 
-    protected $queue;
-    
+    protected $queues = [];
+
     protected $options = [];
-    
+
     protected $current_job = null;
+
+    protected $current_queue;
 
     /**
      * @see Illuminate\Queue\WorkerOptions
@@ -53,9 +55,9 @@ class Worker extends QueueWorker
         add_action('waffle_worker_daemon', [$this, 'daemonFactory']);
     }
 
-    public function setQueue(string $queue = 'default')
+    public function setQueues(array $queues = ['default'])
     {
-        $this->queue = $queue;
+        $this->queues = $queues;
 
         return $this;
     }
@@ -112,7 +114,7 @@ class Worker extends QueueWorker
         );
 
         try {
-            $this->daemon('default', $this->queue, $worker_options);
+            $this->daemon('default', '', $worker_options);
         } catch (Exception $e) {
             $this->handleExceptionDatabaseLogging($e);
         }
@@ -120,8 +122,11 @@ class Worker extends QueueWorker
 
     /**
      * Copied to override the parent Illuminate\Queue\Worker::daemon method
+     *
+     * $_queue not used, but required by parent method
+     * Rather, we use $this->queues within the method to determine which queue to process
      */
-    public function daemon($connectionName, $queue, WorkerOptions $options)
+    public function daemon($connectionName, $_queue, WorkerOptions $options)
     {
         if ($supportsAsyncSignals = $this->supportsAsyncSignals()) {
             $this->listenForSignals();
@@ -132,6 +137,12 @@ class Worker extends QueueWorker
         [$startTime, $jobsProcessed] = [hrtime(true) / 1e9, 0];
 
         while (true) {
+            // MY ADDED CODE
+            // Assign the current queue to the first queue in the array
+            $queue = $this->queues[0] ?? 'default';
+            $this->current_queue = $queue;
+            // END MY ADDED CODE
+
             // Before reserving any jobs, we will make sure this queue is not paused and
             // if it is we will just pause this worker for a given amount of time and
             // make sure we do not need to kill this worker process off completely.
@@ -177,6 +188,12 @@ class Worker extends QueueWorker
                     $this->sleep($options->rest);
                 }
             } else {
+                // MY ADDED CODE
+                // Remove the queue we just processed from the
+                // queue list as there are no more jobs to process
+                $this->queues = array_slice($this->queues, 1);
+                // END MY ADDED CODE
+
                 $this->sleep($options->sleep);
             }
 
@@ -195,7 +212,10 @@ class Worker extends QueueWorker
                 $job
             );
 
-            if (! is_null($status)) {
+            // MY ADDED CODE "&& empty($this->queues)"
+            // In addition to $status logic, stop the
+            // daemon if there are no more queues to process
+            if (! is_null($status) && empty($this->queues)) {
                 return $this->stop($status);
             }
         }
@@ -215,7 +235,7 @@ class Worker extends QueueWorker
     protected function handleExceptionDatabaseLogging(Exception $e)
     {
         $this->app->get('db')->table('waffle_queue_logs')->insert([
-            'queue'      => $this->queue,
+            'queue'      => $this->current_queue,
             'payload'    => $this->current_job ? $this->current_job->getRawBody() : null,
             'exception'  => $e->getMessage(),
         ]);

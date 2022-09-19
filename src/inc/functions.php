@@ -147,8 +147,8 @@ if (!function_exists('waffle_queue')) {
  * @see BoxyBird\Waffle\Worker;
  */
 if (!function_exists('waffle_worker')) {
-    function waffle_worker(string $queue = 'default')
+    function waffle_worker(array $queues = ['default'])
     {
-        return App::getInstance()->make('queue.worker')->setQueue($queue);
+    return App::getInstance()->make('queue.worker')->setQueues($queues);
     }
 }

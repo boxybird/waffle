@@ -56,17 +56,17 @@ class LongRunningJob
         sleep($data['how_long']);
 
         // Something may or may not have gone wrong
-        $failed = false;
+        $oops = false;
 
-        // If $failed === true release the job back to the queue to try 
+        // If $oops === true release the job back to the queue to try 
         // again based on waffle_worker()->setOptions(['maxTries' => 3 // default is 1])
         // Failed jobs are caught and stored in the database and can be
         // viewed in the admin (/wp-admin/tools.php?page=waffle-options.php)
-        if ($failed) {
-            $job->release();
+        if ($oops) {
+            return $job->release();
         }
 
-        // Delete the job from the queue if it succeeds
+        // Delete the job from the queue
         $job->delete();
     }
 }
@@ -74,20 +74,17 @@ class LongRunningJob
 // Push a job onto the default queue
 waffle_queue()->push(LongRunningJob::class, ['how_long' => 5]);
 
-// Run the default queue worker in the background
-waffle_worker()->work();
-
 // Push a job onto a custom queue
 waffle_queue()->push(LongRunningJob::class, ['how_long' => 5], 'my_custom_queue');
 
-// Run the custom queue worker in the background
-waffle_worker('my_custom_queue')->work();
+// Run the default queue worker in the background
+waffle_worker()->work();
 
-// Notes on workers:
-// All workers use WP-Cron to run in the background. The interval is 60 seconds
-// Only a single worker can be run at a time. The last declared worker will be the one that runs
-waffle_worker()->work(); // This will not run
-waffle_worker('my_custom_queue')->work(); // This will run 
+// Run the custom queue worker in the background
+waffle_worker(['my_custom_queue'])->work();
+
+// Run multiple queue workers in the background. Array order determines the priority
+waffle_worker(['my_custom_queue', 'default'])->work();
 
 // Run a queue worker in the background with overridden options
 waffle_worker()->setOptions([
@@ -98,6 +95,12 @@ waffle_worker()->setOptions([
     'maxTime'  => 90, // default is 60 (number of seconds to process each job before stopping)        
     'timeout'  => 120, // Attempts to default to 80% of the servers max_execution_time, else default is 60 seconds (server timeout/worker timeout)
 ])->work();
+
+// Notes on workers:
+// Workers use WP-Cron to run in the background. The interval is 60 seconds
+// Only a single worker can be run at a time. The last declared worker will be the one that runs
+waffle_worker()->work(); // This will not run
+waffle_worker(['my_custom_queue', 'default'])->work(); // This will run 
 
 // Notes on setOptions(): 
 // Both 'timeout' and 'maxTime' work hand in hand as exceptions are thrown if either exceeds server timeout
