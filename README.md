@@ -83,12 +83,18 @@ waffle_queue()->push(LongRunningJob::class, ['how_long' => 5], 'my_custom_queue'
 // Run the custom queue worker in the background
 waffle_worker('my_custom_queue')->work();
 
+// Notes on workers:
+// All workers use WP-Cron to run in the background. The interval is 60 seconds
+// Only a single worker can be run at a time. The last declared worker will be the one that runs
+waffle_worker()->work(); // This will not run
+waffle_worker('my_custom_queue')->work(); // This will run 
+
 // Run a queue worker in the background with overridden options
 waffle_worker()->setOptions([
     'memory'   => 256, // default is 128 (MB)
     'sleep'    => 3, // default is 0 (seconds to sleep after each job)
     'maxTries' => 3, // default is 1 (number of times to try a job before failing)
-    'maxJobs'  => 3, // default is 0 "unlimited" (number of jobs to process before stopping)
+    'maxJobs'  => 3, // default is 500 (number of jobs to process before stopping)
     'maxTime'  => 90, // default is 60 (number of seconds to process each job before stopping)        
     'timeout'  => 120, // Attempts to default to 80% of the servers max_execution_time, else default is 60 seconds (server timeout/worker timeout)
 ])->work();

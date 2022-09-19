@@ -5,18 +5,24 @@ namespace BoxyBird\Waffle;
 use Exception;
 use BoxyBird\Waffle\App;
 use Illuminate\Queue\WorkerOptions;
-use Illuminate\Queue\MaxAttemptsExceededException;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Queue\Worker as QueueWorker;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Contracts\Queue\Factory as QueueManager;
 
-class Worker
+class Worker extends QueueWorker
 {
     protected $app;
 
     protected $queue;
-
-    protected $worker;
-
+    
     protected $options = [];
+    
+    protected $current_job = null;
 
+    /**
+     * @see Illuminate\Queue\WorkerOptions
+     */
     protected $default_options = [
         'name'          => 'default',
         'backoff'       => 0,
@@ -25,29 +31,33 @@ class Worker
         'maxTries'      => 1,
         'force'         => false,
         'stopWhenEmpty' => true,
-        'maxJobs'       => 0,
+        'maxJobs'       => 500,
         'rest'          => 0,
-        'maxTime'       => 60, // per job timeout
+        'maxTime'       => 60,
         // 'timeout'    => Default valued handled by method $this->calculatorDefaultTimeout()
     ];
 
-    public function __construct(string $queue, App $app)
-    {
+    public function __construct(
+        QueueManager $queue,
+        Dispatcher $events,
+        ExceptionHandler $handler,
+        callable $isDownForMaintenance,
+        callable $resetScope = null,
+        App $app
+    ) {
+        parent::__construct($queue, $events, $handler, $isDownForMaintenance, $resetScope);
+
         $this->app = $app;
-        $this->queue = $queue;
-        $this->worker = $app->get('queue.worker');
 
         add_filter('cron_schedules', [$this, 'addSchedule']);
-        add_action('waffle_worker_daemon', [$this, 'daemon']);
+        add_action('waffle_worker_daemon', [$this, 'daemonFactory']);
     }
 
-    public function work()
+    public function setQueue(string $queue = 'default')
     {
-        if (wp_next_scheduled('waffle_worker_daemon')) {
-            return;
-        }
+        $this->queue = $queue;
 
-        wp_schedule_event(time(), 'waffle_worker_daemon_schedule', 'waffle_worker_daemon');
+        return $this;
     }
     
     public function addSchedule($schedules)
@@ -67,10 +77,16 @@ class Worker
         return $this;
     }
 
-    /**
-     * @see Illuminate\Queue\Worker::daemon
-     */
-    public function daemon(): void
+    public function work()
+    {
+        if (wp_next_scheduled('waffle_worker_daemon')) {
+            return;
+        }
+
+        wp_schedule_event(time(), 'waffle_worker_daemon_schedule', 'waffle_worker_daemon');
+    }
+
+    public function daemonFactory(): void
     {
         $this->default_options['timeout'] = $this->calculatorDefaultTimeout();
 
@@ -96,11 +112,92 @@ class Worker
         );
 
         try {
-            $this->worker->daemon('default', $this->queue, $worker_options);
-        } catch (MaxAttemptsExceededException $e) {
-            $this->handleMaxAttemptsExceededException($e);
+            $this->daemon('default', $this->queue, $worker_options);
         } catch (Exception $e) {
-            throw $e;
+            $this->handleExceptionDatabaseLogging($e);
+        }
+    }
+
+    /**
+     * Copied to override the parent Illuminate\Queue\Worker::daemon method
+     */
+    public function daemon($connectionName, $queue, WorkerOptions $options)
+    {
+        if ($supportsAsyncSignals = $this->supportsAsyncSignals()) {
+            $this->listenForSignals();
+        }
+
+        $lastRestart = $this->getTimestampOfLastQueueRestart();
+
+        [$startTime, $jobsProcessed] = [hrtime(true) / 1e9, 0];
+
+        while (true) {
+            // Before reserving any jobs, we will make sure this queue is not paused and
+            // if it is we will just pause this worker for a given amount of time and
+            // make sure we do not need to kill this worker process off completely.
+            if (! $this->daemonShouldRun($options, $connectionName, $queue)) {
+                $status = $this->pauseWorker($options, $lastRestart);
+
+                if (! is_null($status)) {
+                    return $this->stop($status);
+                }
+
+                continue;
+            }
+
+            if (isset($this->resetScope)) {
+                ($this->resetScope)();
+            }
+
+            // First, we will attempt to get the next job off of the queue. We will also
+            // register the timeout handler and reset the alarm for this job so it is
+            // not stuck in a frozen state forever. Then, we can fire off this job.
+            $job = $this->getNextJob(
+                $this->manager->connection($connectionName),
+                $queue
+            );
+
+            if ($supportsAsyncSignals) {
+                $this->registerTimeoutHandler($job, $options);
+            }
+
+            // If the daemon should run (not in maintenance mode, etc.), then we can run
+            // fire off this job for processing. Otherwise, we will need to sleep the
+            // worker so no more jobs are processed until they should be processed.
+            if ($job) {
+                $jobsProcessed++;
+
+                // MY ADDED CODE
+                $this->current_job = $job;
+                // END MY ADDED CODE
+
+                $this->runJob($job, $connectionName, $options);
+
+                if ($options->rest > 0) {
+                    $this->sleep($options->rest);
+                }
+            } else {
+                $this->sleep($options->sleep);
+            }
+
+            if ($supportsAsyncSignals) {
+                $this->resetTimeoutHandler();
+            }
+
+            // Finally, we will check to see if we have exceeded our memory limits or if
+            // the queue should restart based on other indications. If so, we'll stop
+            // this worker and let whatever is "monitoring" it restart the process.
+            $status = $this->stopIfNecessary(
+                $options,
+                $lastRestart,
+                $startTime,
+                $jobsProcessed,
+                $job
+            );
+
+            if (! is_null($status)) {
+                return $this->stop($status);
+            }
         }
     }
 
@@ -115,10 +212,11 @@ class Worker
         return $timeout ?? 60;
     }
 
-    protected function handleMaxAttemptsExceededException(MaxAttemptsExceededException $e)
+    protected function handleExceptionDatabaseLogging(Exception $e)
     {
         $this->app->get('db')->table('waffle_queue_logs')->insert([
             'queue'      => $this->queue,
+            'payload'    => $this->current_job ? $this->current_job->getRawBody() : null,
             'exception'  => $e->getMessage(),
         ]);
     }

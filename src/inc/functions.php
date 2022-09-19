@@ -2,7 +2,6 @@
 
 use BoxyBird\Waffle\App;
 use Illuminate\Support\Str;
-use BoxyBird\Waffle\Worker;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Client\Factory;
 
@@ -145,11 +144,11 @@ if (!function_exists('waffle_queue')) {
 }
 
 /**
- * @see BoxyBird\Waffle\WorkerFactory;
+ * @see BoxyBird\Waffle\Worker;
  */
 if (!function_exists('waffle_worker')) {
     function waffle_worker(string $queue = 'default')
     {
-        return new Worker($queue, App::getInstance());
+        return App::getInstance()->make('queue.worker')->setQueue($queue);
     }
 }

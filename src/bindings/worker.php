@@ -1,8 +1,7 @@
 <?php
 
 use BoxyBird\Waffle\App;
-use Illuminate\Queue\Worker;
-use Illuminate\Queue\WorkerOptions;
+use BoxyBird\Waffle\Worker;
 
 App::getInstance()->singleton('queue.worker', function ($app) {
     $queue = $app->get('queue');
@@ -13,5 +12,5 @@ App::getInstance()->singleton('queue.worker', function ($app) {
         return false;
     };
 
-    return new Worker($queue, $events, $handler, $isDownForMaintenance);
+    return new Worker($queue, $events, $handler, $isDownForMaintenance, null, $app);
 });

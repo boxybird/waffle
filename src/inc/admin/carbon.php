@@ -15,24 +15,6 @@ Container::make('theme_options', __('Waffle'))
             ->set_html(function () {
                 $app = App::getInstance();
 
-                // Create the cache table if it doesn't exist.
-                if (!get_option('waffle_queue_logs_table_exists')) {
-                    update_option('waffle_queue_logs_table_exists', true, true);
-
-                    // Double check if cache table doesn't
-                    // exist as transient may be manually deleted.
-                    if (!$app->get('db')->schema()->hasTable('waffle_queue_logs')) {
-                        $app->get('db')->schema()->create('waffle_queue_logs', function ($table) {
-                            $table->bigIncrements('id');
-                            $table->text('queue');
-                            $table->longText('exception');
-                            $table->timestamp('failed_at')->useCurrent();
-                        });
-                    }
-                    
-                    update_option('waffle_queue_logs_table_exists', true, true);
-                }
-
                 if (isset($_POST['waffle_queue_logs_delete'])
                     && wp_verify_nonce($_POST['_wpnonce'], 'waffle_queue_logs_delete')) {
                     $app->get('db')->table('waffle_queue_logs')->truncate();
