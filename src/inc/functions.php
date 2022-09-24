@@ -134,7 +134,7 @@ if (!function_exists('waffle_storage')) {
 }
 
 /**
- * @see Illuminate\Queue\QueueManager;
+ * @see Illuminate\Queue\DatabaseQueue;
  */
 if (!function_exists('waffle_queue')) {
     function waffle_queue()

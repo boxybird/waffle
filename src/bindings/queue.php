@@ -1,9 +1,9 @@
 <?php
 
 use BoxyBird\Waffle\App;
+use BoxyBird\Waffle\DatabaseConnector;
 use Illuminate\Database\ConnectionResolver;
 use Illuminate\Queue\Capsule\Manager as Queue;
-use Illuminate\Queue\Connectors\DatabaseConnector;
 
 App::getInstance()->singleton('queue', function ($app) {
     // Create the queue table if it doesn't exist.

@@ -46,9 +46,43 @@ Option 2: Clone or download as a plugin and run `composer install` before activa
 class LongRunningJob
 {
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 5;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public $maxExceptions = 3;
+
+    /**
+     * Indicate if the job should be marked as failed on timeout.
+     *
+     * @var bool
+     */
+    public $failOnTimeout = true;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int
+     */
+    public $backoff = 3;
+
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 120;
+
+    /**
      * Handle the job. 
-     * 
-     * **Required method**
+     *
      */
     public function fire($job, $data)
     {
@@ -86,7 +120,7 @@ waffle_worker(['my_custom_queue'])->work();
 // Run multiple queue workers in the background. Array order determines the priority
 waffle_worker(['my_custom_queue', 'default'])->work();
 
-// Run a queue worker in the background with overridden options
+// Run a queue worker in the background with overridden global options
 waffle_worker()->setOptions([
     'memory'   => 256, // default is 128 (MB)
     'sleep'    => 3, // default is 0 (seconds to sleep after each job)
@@ -96,14 +130,15 @@ waffle_worker()->setOptions([
     'timeout'  => 120, // Attempts to default to 80% of the servers max_execution_time, else default is 60 seconds (server timeout/worker timeout)
 ])->work();
 
+// Notes on setOptions(): 
+// Both 'timeout' and 'maxTime' work hand in hand as exceptions are thrown if either exceeds server timeout
+// Defined Job class properties will override global setOptions() values
+
 // Notes on workers:
 // Workers use WP-Cron to run in the background. The interval is 60 seconds
 // Only a single worker can be run at a time. The last declared worker will be the one that runs
 waffle_worker()->work(); // This will not run
 waffle_worker(['my_custom_queue', 'default'])->work(); // This will run 
-
-// Notes on setOptions(): 
-// Both 'timeout' and 'maxTime' work hand in hand as exceptions are thrown if either exceeds server timeout
 ```
 ---
 

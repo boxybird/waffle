@@ -4,7 +4,7 @@
  * Plugin Name:       Waffle
  * Plugin URI:        #
  * Description:       Tools built using Illuminate components (https://github.com/illuminate). Inspired by https://github.com/mattstauffer/Torch.
- * Version:           0.2.1
+ * Version:           0.2.5
  * Author:            Andrew Rhyand
  * Author URI:        andrewrhyand.com
  * License:           MIT License
