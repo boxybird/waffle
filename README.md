@@ -36,6 +36,8 @@ Option 2: Clone or download as a plugin and run `composer install` before activa
 
 [waffle_str](#waffle_str)
 
+[waffle_arr](#waffle_arr)
+
 ---
 
 ### waffle_queue / waffle_worker
@@ -391,4 +393,17 @@ $string = waffle_str('hello world')
     ->upper();
 
 echo $string; // HELLO_UNIVERSE
+```
+
+## waffle_arr
+
+Reference: https://laravel.com/docs/8.x/helpers#arrays-and-objects-method-list
+```php
+<?php
+
+$array = ['products' => ['desk' => ['price' => 100]]];
+ 
+$price = waffle_arr()->get($array, 'products.desk.price');
+
+echo $price; // 100
 ```

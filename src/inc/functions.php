@@ -2,6 +2,7 @@
 
 use BoxyBird\Waffle\App;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Client\Factory;
 
@@ -104,6 +105,16 @@ if (!function_exists('waffle_str')) {
 }
 
 /**
+ * @see \Illuminate\Support\Arr
+ */
+if (!function_exists('waffle_arr')) {
+    function waffle_arr()
+    {
+        return new Arr();
+    }
+}
+
+/**
  * @see Illuminate\Http\Client\Factory
  */
 if (!function_exists('waffle_http')) {
@@ -149,6 +160,6 @@ if (!function_exists('waffle_queue')) {
 if (!function_exists('waffle_worker')) {
     function waffle_worker(array $queues = ['default'])
     {
-    return App::getInstance()->make('queue.worker')->setQueues($queues);
+        return App::getInstance()->make('queue.worker')->setQueues($queues);
     }
 }
