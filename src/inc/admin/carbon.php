@@ -15,19 +15,25 @@ Container::make('theme_options', __('Waffle'))
             ->set_html(function () {
                 $app = App::getInstance();
 
-                if (isset($_POST['waffle_queue_logs_delete'])
+                $logs = [];
+                $latest = 0;
+                $logs_count = 0;
+
+                if ($app->get('db')->schema()->hasTable('waffle_queue_logs')) {
+                    if (isset($_POST['waffle_queue_logs_delete'])
                     && wp_verify_nonce($_POST['_wpnonce'], 'waffle_queue_logs_delete')) {
-                    $app->get('db')->table('waffle_queue_logs')->truncate();
+                        $app->get('db')->table('waffle_queue_logs')->truncate();
+                    }
+
+                    $latest = 30;
+
+                    $logs_table = $app->get('db')->table('waffle_queue_logs');
+
+                    $logs_count = $logs_table->count();
+                    
+                    $logs = $logs_table->orderBy('id', 'desc')->take($latest)->get();
                 }
-
-                $latest = 30;
-
-                $logs_table = $app->get('db')->table('waffle_queue_logs');
-
-                $logs_count = $logs_table->count();
-                
-                $logs = $logs_table->orderBy('id', 'desc')->take($latest)->get();
-
+            
                 ob_start();
                 require_once __DIR__ . '/templates/queue-logs.php';
                 
