@@ -92,7 +92,7 @@ add_action('send_headers', function () {
     $cookie = new Symfony\Component\HttpFoundation\Cookie(
         $session_manager->getName(),
         $session_manager->getId(),
-        time() + ($config->get('session.lifetime', 120) * 60),
+        time() + ($config->get('session.lifetime') * 60),
         $config->get('session.path', '/'),
         $config->get('session.domain', null),
         $config->get('session.secure', true),
@@ -120,3 +120,23 @@ add_action('wp_footer', function () {
 
     $app->get('session')->save();
 }, PHP_INT_MAX);
+
+/**
+ * Create a cron job to handle session cleanup
+ */
+if (!wp_next_scheduled('waffle_delete_expired_sessions')) {
+    wp_schedule_event(time(), 'daily', 'waffle_delete_expired_sessions');
+}
+
+/**
+ * Cleanup expired sessions
+ */
+add_action('waffle_delete_expired_sessions', function () {
+    $app = BoxyBird\Waffle\App::getInstance();
+
+    $lifetime = $app->get('config')->get('session.lifetime');
+
+    $app->get('db')->table('waffle_sessions')
+        ->where('last_activity', '<', time() - ($lifetime * 60))
+        ->delete();
+});
