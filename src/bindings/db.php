@@ -19,7 +19,7 @@ App::getInstance()->singleton('db', function () {
     ]);
 
     $capsule->setAsGlobal();
-    // $capsule->bootEloquent();
+    $capsule->bootEloquent();
 
     return $capsule;
 });
