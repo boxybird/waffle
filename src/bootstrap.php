@@ -76,9 +76,9 @@ require __DIR__ . '/bindings/encrypter.php';
 require_once __DIR__ . '/inc/functions.php';
 
 /**
- * Require Carbon Fields
+ * Require Admin Pages
  */
-require_once __DIR__ . '/inc/carbon.php';
+require_once __DIR__ . '/inc/admin-pages.php';
 
 /**
  * Require Sessions handler
