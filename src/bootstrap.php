@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * Require app binding
+ */
+require __DIR__ . '/bindings/app.php';
+
+/**
  * Require config binding
  */
 require __DIR__ . '/bindings/config.php';
