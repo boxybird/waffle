@@ -7,24 +7,15 @@ use Illuminate\Session\SessionManager;
  * Bind session instance to container
  */
 App::getInstance()->singleton('session', function ($app) {
-     // Create the session table if it doesn't exist.
-     if (!get_option('waffle_sessions_table_exists')) {
-        update_option('waffle_sessions_table_exists', true, true);
-
-        // Double check if session table doesn't
-        // exist as transient may be manually deleted.
-        if (!$app->get('db')->schema()->hasTable('waffle_sessions')) {
-            $app->get('db')->schema()->create('waffle_sessions', function ($table) {
-                $table->string('id')->primary();
-                $table->foreignId('user_id')->nullable()->index();
-                $table->string('ip_address', 45)->nullable();
-                $table->text('user_agent')->nullable();
-                $table->text('payload');
-                $table->integer('last_activity')->index();
-            });
-
-            update_option('waffle_sessions_table_exists', true, true);
-        }
+    if (!$app->get('db')->schema()->hasTable('waffle_sessions')) {
+        $app->get('db')->schema()->create('waffle_sessions', function ($table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->text('payload');
+            $table->integer('last_activity')->index();
+        });
     }
 
     $session_manager = new SessionManager($app);
