@@ -18,13 +18,21 @@
     "psr-4": {
       "BoxyBird\\Waffle\\": "src/"
     },
-     "files": [
+    "files": [
       "src/bootstrap.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
   },
   "config": {
     "platform": {
       "php": "8.2"
+    },
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
     }
   },
   "require": {
@@ -49,5 +57,8 @@
     "filp/whoops": "^2.18.0",
     "league/flysystem": "^3.29.0",
     "league/flysystem-aws-s3-v3": "^3.29.0"
+  },
+  "require-dev": {
+    "pestphp/pest": "^3.8"
   }
 }
