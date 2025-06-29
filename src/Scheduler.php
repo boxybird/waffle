@@ -56,11 +56,11 @@ class Scheduler
     {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
 
-        if (!isset($backtrace[1]['file'], $backtrace[1]['line'])) {
+        if (!isset($backtrace[0]['file'], $backtrace[0]['line'])) {
             throw new \Exception('Could not determine a unique ID for the scheduled job.');
         }
 
-        $caller = $backtrace[1];
+        $caller = $backtrace[0];
 
         $this->hook = 'waffle_schedule_'.md5($caller['file'].':'.$caller['line']);
 
