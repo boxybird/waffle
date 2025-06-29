@@ -206,10 +206,13 @@ Reference: // https://laravel.com/docs/12.x/validation
 ```php
 <?php
 
+$nonce = wp_create_nonce('secret');
+
 $data = [
     'name'  => 'John Doe',
     'email' => 'john@doe.com',
     'age'   => 20,
+    'nonce' => $nonce,
 ];
 
 $validator = waffle_validator($data,
@@ -217,6 +220,7 @@ $validator = waffle_validator($data,
         'name'  => 'required',
         'email' => 'required|email',
         'age'   => 'required|integer|min:21',
+        'nonce' => 'required|verify_nonce:secret',
     ],
     [
         'age.min' => 'Not old enough', // Custom error message for age.min
