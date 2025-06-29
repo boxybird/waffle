@@ -56,7 +56,8 @@
     "predis/predis": "3.0.1",
     "filp/whoops": "^2.18.0",
     "league/flysystem": "^3.29.0",
-    "league/flysystem-aws-s3-v3": "^3.29.0"
+    "league/flysystem-aws-s3-v3": "^3.29.0",
+    "league/uri": "^7.5"
   },
   "require-dev": {
     "pestphp/pest": "^3.8"

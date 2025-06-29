@@ -36,6 +36,10 @@ composer require boxybird/waffle
 
 [waffle_arr](#waffle_arr)
 
+[waffle_uri](#waffle_uri)
+
+[waffle_benchmark](#waffle_benchmark)
+
 ---
 
 ### waffle_queue / waffle_worker
@@ -144,7 +148,7 @@ waffle_worker(['my_custom_queue', 'default'])->work(); // This will run
 
 ### waffle_db
 
-Reference: https://laravel.com/docs/8.x/queries
+Reference: https://laravel.com/docs/12.x/queries
 ```php
 <?php
 
@@ -177,7 +181,7 @@ $query = waffle_db()
 
 ### waffle_validator
 
-Reference: // https://laravel.com/docs/8.x/validation
+Reference: // https://laravel.com/docs/12.x/validation
 ```php
 <?php
 
@@ -201,7 +205,7 @@ $validator = waffle_validator($data,
 
 ## waffle_encrypter
 
-Reference: https://laravel.com/docs/8.x/encryption
+Reference: https://laravel.com/docs/12.x/encryption
 ```php
 <?php
 
@@ -216,7 +220,7 @@ $decrypted = waffle_encrypter()->decrypt($encrypted);
 
 ## waffle_http
 
-Reference: https://laravel.com/docs/8.x/http-client
+Reference: https://laravel.com/docs/12.x/http-client
 ```php
 <?php
 
@@ -242,7 +246,7 @@ $response = waffle_http()
 
 ## waffle_cache
 
-Reference: https://laravel.com/docs/8.x/cache
+Reference: https://laravel.com/docs/12.x/cache
 ```php
 <?php
 
@@ -281,7 +285,7 @@ add_action('save_post', function ($post_id) {
 
 ## waffle_session
 
-Reference: https://laravel.com/docs/8.x/session
+Reference: https://laravel.com/docs/12.x/session
 ```php
 <?php
 
@@ -306,7 +310,7 @@ if (waffle_session()->has('message')) {
 
 ## waffle_storage
 
-Reference: https://laravel.com/docs/8.x/filesystem
+Reference: https://laravel.com/docs/12.x/filesystem
 ```php
 <?php
 
@@ -342,7 +346,7 @@ $url = $disk->url('hello-world.txt');
 
 ## waffle_request
 
-Reference: https://laravel.com/docs/8.x/requests
+Reference: https://laravel.com/docs/12.x/requests
 ```php
 <?php
 
@@ -363,7 +367,7 @@ $first_name = waffle_request()->only(['first_name']);
 
 ## waffle_collection
 
-Reference: https://laravel.com/docs/8.x/collections
+Reference: https://laravel.com/docs/12.x/collections
 ```php
 <?php
 
@@ -381,7 +385,7 @@ $posts = waffle_collection(get_posts())
 
 ## waffle_str
 
-Reference: https://laravel.com/docs/8.x/helpers#fluent-strings
+Reference: https://laravel.com/docs/12.x/helpers#fluent-strings
 ```php
 <?php
 
@@ -395,7 +399,7 @@ echo $string; // HELLO_UNIVERSE
 
 ## waffle_arr
 
-Reference: https://laravel.com/docs/8.x/helpers#arrays-and-objects-method-list
+Reference: https://laravel.com/docs/12.x/helpers#arrays-and-objects-method-list
 ```php
 <?php
 
@@ -404,4 +408,33 @@ $array = ['products' => ['desk' => ['price' => 100]]];
 $price = waffle_arr()->get($array, 'products.desk.price');
 
 echo $price; // 100
+```
+
+## waffle_uri
+
+Reference: https://laravel.com/docs/12.x/helpers#uri
+```php
+<?php
+
+$uri = Uri::of('https://example.com')
+    ->withScheme('https')
+    ->withHost('test.com')
+    ->withPort(8000)
+    ->withPath('/users')
+    ->withQuery(['page' => 2])
+    ->withFragment('section-1');
+
+echo $uri; // 'https://test.com:8000/users?page=2#section-1'
+```
+
+## waffle_benchmark
+
+Reference: https://laravel.com/docs/12.x/helpers#benchmarking
+```php
+<?php
+
+waffle_benchmark()->dd([
+    fn() => get_posts(),
+    fn() => waffle_db()->table('wp_posts')->take(10)->get(),
+]);
 ```

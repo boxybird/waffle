@@ -3,8 +3,10 @@
 use BoxyBird\Waffle\App;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Benchmark;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Uri;
 
 if (!function_exists('waffle_app')) {
     /**
@@ -112,6 +114,26 @@ if (!function_exists('waffle_arr')) {
     function waffle_arr()
     {
         return new Arr();
+    }
+}
+
+if (!function_exists('waffle_benchmark')) {
+    /**
+     * @return \Illuminate\Support\Benchmark
+     */
+    function waffle_benchmark()
+    {
+        return new Benchmark();
+    }
+}
+
+if (!function_exists('waffle_uri')) {
+    /**
+     * @return \Illuminate\Support\Uri
+     */
+    function waffle_uri()
+    {
+        return new Uri();
     }
 }
 
