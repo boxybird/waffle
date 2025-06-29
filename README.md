@@ -14,6 +14,8 @@ composer require boxybird/waffle
 
 [waffle_worker](#waffle_queue--waffle_worker)
 
+[waffle_schedule](#waffle_schedule)
+
 [waffle_db](#waffle_db)
 
 [waffle_validator](#waffle_validator)
@@ -146,6 +148,25 @@ waffle_worker(['my_custom_queue', 'default'])->work(); // This will run
 ```
 ---
 
+## waffle_schedule
+
+```php
+<?php
+
+waffle_schedule()->call(function () {
+    // Run code
+})->everyMinute();
+
+// ->everyFiveMinutes()
+// ->everyFifteenMinutes()
+// ->everyThirtyMinutes()
+// ->hourly()
+// ->twiceDaily()
+// ->daily()
+// ->weekly()
+
+```
+
 ### waffle_db
 
 Reference: https://laravel.com/docs/12.x/queries
@@ -179,7 +200,7 @@ $query = waffle_db()
     ->get();
 ```
 
-### waffle_validator
+## waffle_validator
 
 Reference: // https://laravel.com/docs/12.x/validation
 ```php

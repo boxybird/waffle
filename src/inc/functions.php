@@ -1,6 +1,7 @@
 <?php
 
 use BoxyBird\Waffle\App;
+use BoxyBird\Waffle\Scheduler;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Benchmark;
@@ -186,3 +187,13 @@ if (!function_exists('waffle_worker')) {
         return App::getInstance()->make('queue.worker')->setQueues($queues);
     }
 }
+
+if (!function_exists('waffle_schedule')) {
+    /**
+     * @return Scheduler
+     */
+    function waffle_schedule()
+    {
+        return new Scheduler;
+    }
+};
