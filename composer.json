@@ -53,7 +53,7 @@
     "illuminate/contracts": "^12.2.0",
     "illuminate/pagination": "^12.2.0",
     "illuminate/redis": "^12.2.0",
-    "predis/predis": "^v2.3.0",
+    "predis/predis": "3.0.1",
     "filp/whoops": "^2.18.0",
     "league/flysystem": "^3.29.0",
     "league/flysystem-aws-s3-v3": "^3.29.0"
