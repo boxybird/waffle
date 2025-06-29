@@ -17,7 +17,7 @@ test('can create database table', function () {
     expect($exists)->toBeTrue();
 });
 
-test('can get insert row', function () {
+test('can insert row', function () {
     waffle_db()->table('waffle_custom_table')->insert([
         'user_id' => 1,
         'extra_user_content' => 'Some extra content about the user.',
@@ -30,13 +30,13 @@ test('can get insert row', function () {
         ->and($row->extra_user_content)->toBe('Some extra content about the user.');
 });
 
-test('can get select row', function () {
+test('can select row', function () {
     $row = waffle_db()->table('waffle_custom_table')->first();
 
     expect($row->user_id)->toBe(1);
 });
 
-test('can get update row', function () {
+test('can update row', function () {
     waffle_db()->table('waffle_custom_table')->update([
         'extra_user_content' => 'Some extra content about the user.',
     ]);
@@ -46,7 +46,7 @@ test('can get update row', function () {
     expect($row->extra_user_content)->toBe('Some extra content about the user.');
 });
 
-test('can get delete row', function () {
+test('can delete row', function () {
     waffle_db()->table('waffle_custom_table')->delete();
 
     $row = waffle_db()->table('waffle_custom_table')->first();

@@ -6,6 +6,14 @@ test('can put cache', function () {
     expect($cache)->toBeTrue();
 });
 
+test('can remember cache', function () {
+    $cache = waffle_cache()->remember('remember', 10, function () {
+        return 'remember';
+    });
+
+    expect($cache)->toBe('remember');
+});
+
 test('can get cache', function () {
     $cache = waffle_cache()->get('test');
 
