@@ -84,7 +84,6 @@ class Scheduler
         }
     }
 
-
     public function everyMinute(): void
     {
         if (!wp_next_scheduled($this->hook)) {
