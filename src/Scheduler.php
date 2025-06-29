@@ -13,7 +13,7 @@ class Scheduler
     public function __construct()
     {
         if (!self::$schedules_registered) {
-            add_filter('cron_schedules', [__CLASS__, 'registerCustomSchedules']);
+            add_filter('cron_schedules', self::registerCustomSchedules(...));
 
             self::$schedules_registered = true;
         }
@@ -66,7 +66,7 @@ class Scheduler
 
         self::$jobs[$this->hook] = $callback;
 
-        add_action($this->hook, [__CLASS__, 'runJob']);
+        add_action($this->hook, self::runJob(...));
 
         return $this;
     }

@@ -23,9 +23,7 @@ App::getInstance()->singleton('validation', function ($app): Factory {
     foreach ($rules as $key => $rule_class) {
         $rule_class = new $rule_class();
 
-        $validation->extend($key, function ($attribute, $value, $parameters, $validator) use ($rule_class) {
-            return $rule_class->passes($attribute, $value, $parameters, $validator);
-        }, $rule_class->message());
+        $validation->extend($key, fn($attribute, $value, $parameters, $validator) => $rule_class->passes($attribute, $value, $parameters, $validator), $rule_class->message());
     }
 
     return $validation;

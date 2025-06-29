@@ -6,6 +6,4 @@ use Illuminate\Filesystem\Filesystem;
 /**
  * Bind files instance to container
  */
-App::getInstance()->singleton('files', function (): Filesystem {
-    return new Filesystem;
-});
+App::getInstance()->singleton('files', fn(): Filesystem => new Filesystem);

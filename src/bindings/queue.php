@@ -38,9 +38,7 @@ App::getInstance()->singleton('queue', function ($app) {
         'host' => 'localhost',
     ]);
 
-    $queue->addConnector('database', function () use ($app): DatabaseConnector {
-        return new DatabaseConnector($app->get('db'));
-    });
+    $queue->addConnector('database', fn(): DatabaseConnector => new DatabaseConnector($app->get('db')));
 
     // $queue->setAsGlobal();
 
@@ -50,9 +48,7 @@ App::getInstance()->singleton('queue', function ($app) {
         'default' => $app->get('db')->getConnection(),
     ]);
 
-    $queue_manager->addConnector('database', function () use ($resolver): DatabaseConnector {
-        return new DatabaseConnector($resolver);
-    });
+    $queue_manager->addConnector('database', fn(): DatabaseConnector => new DatabaseConnector($resolver));
 
     return $queue_manager;
 });

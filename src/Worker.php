@@ -12,8 +12,6 @@ use Illuminate\Contracts\Queue\Factory as QueueManager;
 
 class Worker extends QueueWorker
 {
-    protected App $app;
-
     protected $queues = [];
 
     protected $options = [];
@@ -44,15 +42,13 @@ class Worker extends QueueWorker
         Dispatcher $events,
         ExceptionHandler $handler,
         callable $isDownForMaintenance,
-        callable $resetScope = null,
-        App $app
+        protected App $app,
+        callable $resetScope = null
     ) {
         parent::__construct($queue, $events, $handler, $isDownForMaintenance, $resetScope);
 
-        $this->app = $app;
-
-        add_filter('cron_schedules', [$this, 'addSchedule']);
-        add_action('waffle_worker_daemon', [$this, 'daemonFactory']);
+        add_filter('cron_schedules', $this->addSchedule(...));
+        add_action('waffle_worker_daemon', $this->daemonFactory(...));
     }
 
     public function setQueues(array $queues = ['default']): static
@@ -234,7 +230,7 @@ class Worker extends QueueWorker
         return $timeout ?? 60;
     }
 
-    protected function handleExceptionDatabaseLogging(Exception $e)
+    protected function handleExceptionDatabaseLogging(\Throwable $e)
     {
         $this->app->get('db')->table('waffle_queue_logs')->insert([
             'queue'      => $this->current_queue,

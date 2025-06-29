@@ -8,9 +8,7 @@ App::getInstance()->singleton('queue.worker', function ($app): Worker {
     $events = $app->get('events');
     $handler = $app->get('exception.handler');
 
-    $isDownForMaintenance = function (): false {
-        return false;
-    };
+    $isDownForMaintenance = (fn(): false => false);
 
-    return new Worker($queue, $events, $handler, $isDownForMaintenance, null, $app);
+    return new Worker($queue, $events, $handler, $isDownForMaintenance, $app, null);
 });

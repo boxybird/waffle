@@ -23,12 +23,14 @@ add_action('send_headers', function (): void {
 
     setcookie(
         $cookie->getName(),
-        $cookie->getValue(),
-        $cookie->getExpiresTime(),
-        $cookie->getPath(),
-        $cookie->getDomain(),
-        $cookie->isSecure(),
-        $cookie->isHttpOnly()
+        (string) $cookie->getValue(),
+        [
+            'expires' => $cookie->getExpiresTime(),
+            'path' => $cookie->getPath(),
+            'domain' => $cookie->getDomain(),
+            'secure' => $cookie->isSecure(),
+            'httponly' => $cookie->isHttpOnly()
+        ],
     );
 });
 

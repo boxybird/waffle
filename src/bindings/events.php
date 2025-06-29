@@ -6,4 +6,4 @@ use Illuminate\Events\EventServiceProvider;
 
 (new EventServiceProvider(App::getInstance()))->register();
 
-App::getInstance()->instance('Illuminate\Contracts\Events\Dispatcher', new Dispatcher(App::getInstance()));
+App::getInstance()->instance(\Illuminate\Contracts\Events\Dispatcher::class, new Dispatcher(App::getInstance()));
