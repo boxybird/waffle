@@ -62,8 +62,6 @@ class Guard
 
     /**
      * Validate a user's credentials.
-     *
-     * @return \WP_Error|\WP_User
      */
     public function validate(array $credentials = []): \WP_Error|\WP_User
     {
