@@ -7,8 +7,6 @@ use Illuminate\Container\Container;
 class App extends Container
 {
     /**
-     * @return bool
-     *
      * @see \Illuminate\Contracts\Foundation\Application::isDownForMaintenance()
      */
     public function isDownForMaintenance(): bool
@@ -18,11 +16,10 @@ class App extends Container
 
     /**
      * @param string|string[] $environments
-     * @return string|bool
      *
      * @see \Illuminate\Contracts\Foundation\Application::environment()
      */
-    public function environment(...$environments)
+    public function environment(...$environments): string|bool
     {
         if (empty($environments)) {
             return 'waffle';
@@ -35,8 +32,6 @@ class App extends Container
     }
 
     /**
-     * @return string
-     *
      * @see \Illuminate\Contracts\Foundation\Application::getNamespace()
      */
     public function getNamespace(): string

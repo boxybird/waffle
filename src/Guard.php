@@ -27,10 +27,8 @@ class Guard
 
     /**
      * Determine if the current user is a guest.
-     *
-     * @return bool
      */
-    public function guest()
+    public function guest(): bool
     {
         return !is_user_logged_in();
     }
@@ -39,7 +37,7 @@ class Guard
      * Get the currently authenticated user.
      *
      */
-    public function user()
+    public function user(): ?array
     {
         if (!$this->check()) {
             return null;
@@ -65,10 +63,9 @@ class Guard
     /**
      * Validate a user's credentials.
      *
-     * @param  array  $credentials
-     * @return bool
+     * @return \WP_Error|\WP_User
      */
-    public function validate(array $credentials = [])
+    public function validate(array $credentials = []): \WP_Error|\WP_User
     {
         return wp_authenticate_username_password($this->user, $credentials['username'], $credentials['password']);
     }

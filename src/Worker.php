@@ -12,13 +12,13 @@ use Illuminate\Contracts\Queue\Factory as QueueManager;
 
 class Worker extends QueueWorker
 {
-    protected $app;
+    protected App $app;
 
     protected $queues = [];
 
     protected $options = [];
 
-    protected $current_job = null;
+    protected $current_job;
 
     protected $current_queue;
 
@@ -55,14 +55,14 @@ class Worker extends QueueWorker
         add_action('waffle_worker_daemon', [$this, 'daemonFactory']);
     }
 
-    public function setQueues(array $queues = ['default'])
+    public function setQueues(array $queues = ['default']): static
     {
         $this->queues = $queues;
 
         return $this;
     }
     
-    public function addSchedule($schedules)
+    public function addSchedule(array $schedules): array
     {
         $schedules['waffle_worker_daemon_schedule'] = [
             'interval' => 60,
@@ -79,7 +79,7 @@ class Worker extends QueueWorker
         return $this;
     }
 
-    public function work()
+    public function work(): void
     {
         if (wp_next_scheduled('waffle_worker_daemon')) {
             return;
@@ -156,7 +156,7 @@ class Worker extends QueueWorker
                 continue;
             }
 
-            if (isset($this->resetScope)) {
+            if ($this->resetScope !== null) {
                 ($this->resetScope)();
             }
 
@@ -219,6 +219,8 @@ class Worker extends QueueWorker
                 return $this->stop($status);
             }
         }
+
+        return null;
     }
 
     protected function calculatorDefaultTimeout(): int

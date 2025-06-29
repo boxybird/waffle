@@ -6,7 +6,7 @@ use Illuminate\Config\Repository;
 /**
  * Bind config instance to container
  */
-App::getInstance()->singleton('config', function () {
+App::getInstance()->singleton('config', function (): Repository {
     $files = [];
 
     foreach (glob(__DIR__ . '/../config/*.php') as $file) {

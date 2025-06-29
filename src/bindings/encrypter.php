@@ -3,7 +3,7 @@
 use BoxyBird\Waffle\App;
 use Illuminate\Encryption\Encrypter;
 
-App::getInstance()->bind('encrypter', function () {
+App::getInstance()->bind('encrypter', function (): Encrypter {
     /*
     * This WAFFLE_ENCRYPTER_KEY is used by the Illuminate encrypter service and should be set
     * to a random, 16-character string, otherwise these encrypted strings

@@ -9,7 +9,7 @@ use Illuminate\Validation\DatabasePresenceVerifier;
 /**
  * Bind validation instance to container
  */
-App::getInstance()->singleton('validation', function ($app) {
+App::getInstance()->singleton('validation', function ($app): Factory {
     $loader = new FileLoader($app->get('files'), 'lang');
     $translator = new Translator($loader, 'en');
     $presence = new DatabasePresenceVerifier($app->get('db')->getDatabaseManager());

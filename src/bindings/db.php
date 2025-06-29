@@ -20,6 +20,6 @@ $capsule->addConnection([
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-App::getInstance()->singleton('db', function () use ($capsule) {
+App::getInstance()->singleton('db', function () use ($capsule): Capsule {
     return $capsule;
 });

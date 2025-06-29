@@ -6,7 +6,7 @@ use Illuminate\Session\SessionManager;
 /**
  * Bind session instance to container
  */
-App::getInstance()->singleton('session', function ($app) {
+App::getInstance()->singleton('session', function ($app): SessionManager {
     if (!$app->get('db')->schema()->hasTable('waffle_sessions')) {
         $app->get('db')->schema()->create('waffle_sessions', function ($table): void {
             $table->string('id')->primary();
@@ -22,10 +22,8 @@ App::getInstance()->singleton('session', function ($app) {
 
     $cookie_name = $session_manager->getName();
 
-    if (isset($_COOKIE[$cookie_name])) {
-        if ($session_id = $_COOKIE[$cookie_name]) {
-            $session_manager->setId($session_id);
-        }
+    if (isset($_COOKIE[$cookie_name]) && $session_id = $_COOKIE[$cookie_name]) {
+        $session_manager->setId($session_id);
     }
 
     // Boot the session

@@ -109,40 +109,28 @@ if (!function_exists('waffle_str')) {
 }
 
 if (!function_exists('waffle_arr')) {
-    /**
-     * @return \Illuminate\Support\Arr
-     */
-    function waffle_arr()
+    function waffle_arr(): \Illuminate\Support\Arr
     {
         return new Arr();
     }
 }
 
 if (!function_exists('waffle_benchmark')) {
-    /**
-     * @return \Illuminate\Support\Benchmark
-     */
-    function waffle_benchmark()
+    function waffle_benchmark(): Benchmark
     {
         return new Benchmark();
     }
 }
 
 if (!function_exists('waffle_uri')) {
-    /**
-     * @return \Illuminate\Support\Uri
-     */
-    function waffle_uri()
+    function waffle_uri(): Uri
     {
         return new Uri();
     }
 }
 
 if (!function_exists('waffle_http')) {
-    /**
-     * @return \Illuminate\Http\Client\Factory
-     */
-    function waffle_http()
+    function waffle_http(): Factory
     {
         return new Factory();
     }
@@ -189,10 +177,7 @@ if (!function_exists('waffle_worker')) {
 }
 
 if (!function_exists('waffle_schedule')) {
-    /**
-     * @return Scheduler
-     */
-    function waffle_schedule()
+    function waffle_schedule(): Scheduler
     {
         return new Scheduler;
     }
