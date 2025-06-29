@@ -5,6 +5,7 @@ use BoxyBird\Waffle\Scheduler;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Benchmark;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Uri;
@@ -182,3 +183,10 @@ if (!function_exists('waffle_schedule')) {
         return new Scheduler;
     }
 };
+
+if (!function_exists('waffle_carbon')) {
+    function waffle_carbon(): Carbon
+    {
+        return new Carbon();
+    }
+}
