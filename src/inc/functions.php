@@ -2,49 +2,47 @@
 
 use BoxyBird\Waffle\App;
 use BoxyBird\Waffle\Scheduler;
+use BoxyBird\Waffle\Worker;
+use Illuminate\Cache\CacheManager;
+use Illuminate\Config\Repository;
+use Illuminate\Database\Capsule\Manager;
+use Illuminate\Encryption\Encrypter;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Client\Factory;
+use Illuminate\Http\Request;
+use Illuminate\Queue\QueueManager;
+use Illuminate\Session\SessionManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Benchmark;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Uri;
+use Illuminate\Validation\Validator;
 
 if (!function_exists('waffle_app')) {
-    /**
-     * @return \BoxyBird\Waffle\App
-     */
-    function waffle_app()
+    function waffle_app(): App
     {
         return App::getInstance();
     }
 }
 
 if (!function_exists('waffle_request')) {
-    /**
-     * @return \Illuminate\Http\Request
-     */
-    function waffle_request()
+    function waffle_request(): Request
     {
         return App::getInstance()->make('request');
     }
 }
 
 if (!function_exists('waffle_config')) {
-    /**
-     * @return \Illuminate\Config\Repository
-     */
-    function waffle_config()
+    function waffle_config(): Repository
     {
         return App::getInstance()->make('config');
     }
 }
 
 if (!function_exists('waffle_validator')) {
-    /**
-     * @return \Illuminate\Validation\Factory
-     */
-    function waffle_validator(array $data, array $rules, array $messages = [], array $customAttributes = [])
+    function waffle_validator(array $data, array $rules, array $messages = [], array $customAttributes = []): Validator
     {
         $default_messages = require __DIR__.'/../config/validation-messages.php';
 
@@ -55,31 +53,21 @@ if (!function_exists('waffle_validator')) {
 }
 
 if (!function_exists('waffle_db')) {
-    /**
-     * @return \Illuminate\Database\Capsule\Manager
-     */
-    function waffle_db()
+    function waffle_db(): Manager
     {
         return App::getInstance()->make('db');
     }
 }
 
-
 if (!function_exists('waffle_session')) {
-    /**
-     * @return \Illuminate\Session\SessionManager
-     */
-    function waffle_session()
+    function waffle_session(): SessionManager
     {
         return App::getInstance()->make('session');
     }
 }
 
 if (!function_exists('waffle_cache')) {
-    /**
-     * @return \Illuminate\Cache\CacheManager
-     */
-    function waffle_cache()
+    function waffle_cache(): CacheManager
     {
         $cache_manager = App::getInstance()->make('cache');
 
@@ -90,27 +78,21 @@ if (!function_exists('waffle_cache')) {
 }
 
 if (!function_exists('waffle_collection')) {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    function waffle_collection(array $items = [])
+    function waffle_collection(array $items = []): Collection
     {
         return Collection::make($items);
     }
 }
 
 if (!function_exists('waffle_str')) {
-    /**
-     * @return \Illuminate\Support\Stringable
-     */
-    function waffle_str(string $string)
+    function waffle_str(string $string): Stringable
     {
         return Str::of($string);
     }
 }
 
 if (!function_exists('waffle_arr')) {
-    function waffle_arr(): \Illuminate\Support\Arr
+    function waffle_arr(): Arr
     {
         return new Arr();
     }
@@ -138,40 +120,28 @@ if (!function_exists('waffle_http')) {
 }
 
 if (!function_exists('waffle_encrypter')) {
-    /**
-     * @return \Illuminate\Encryption\Encrypter
-     */
-    function waffle_encrypter()
+    function waffle_encrypter(): Encrypter
     {
         return App::getInstance()->make('encrypter');
     }
 }
 
 if (!function_exists('waffle_storage')) {
-    /**
-     * @return \Illuminate\Filesystem\FilesystemManager
-     */
-    function waffle_storage()
+    function waffle_storage(): FilesystemManager
     {
         return App::getInstance()->make('storage');
     }
 }
 
 if (!function_exists('waffle_queue')) {
-    /**
-     * @return \Illuminate\Queue\DatabaseQueue
-     */
-    function waffle_queue()
+    function waffle_queue(): QueueManager
     {
         return App::getInstance()->make('queue');
     }
 }
 
 if (!function_exists('waffle_worker')) {
-    /**
-     * @return \BoxyBird\Waffle\Worker
-     */
-    function waffle_worker(array $queues = ['default'])
+    function waffle_worker(array $queues = ['default']): Worker
     {
         return App::getInstance()->make('queue.worker')->setQueues($queues);
     }
