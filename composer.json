@@ -60,6 +60,7 @@
     "league/uri": "^7.5"
   },
   "require-dev": {
-    "pestphp/pest": "^3.8"
+    "pestphp/pest": "^3.8",
+    "rector/rector": "^2.1"
   }
 }
