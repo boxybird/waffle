@@ -10,7 +10,7 @@ if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
 } else {
     $message = 'Waffle plugin requires to you run "composer install" first.';
 
-    add_action('admin_notices', function () use ($message) {
+    add_action('admin_notices', function () use ($message): void {
         ?>
             <div class="notice notice-error">
                 <p><?= $message; ?></p>

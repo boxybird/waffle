@@ -8,7 +8,7 @@ use Illuminate\Session\SessionManager;
  */
 App::getInstance()->singleton('session', function ($app) {
     if (!$app->get('db')->schema()->hasTable('waffle_sessions')) {
-        $app->get('db')->schema()->create('waffle_sessions', function ($table) {
+        $app->get('db')->schema()->create('waffle_sessions', function ($table): void {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();

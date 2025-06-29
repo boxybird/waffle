@@ -7,7 +7,7 @@ use Illuminate\Queue\Capsule\Manager as Queue;
 
 App::getInstance()->singleton('queue', function ($app) {
     if (!$app->get('db')->schema()->hasTable('waffle_queue')) {
-        $app->get('db')->schema()->create('waffle_queue', function ($table) {
+        $app->get('db')->schema()->create('waffle_queue', function ($table): void {
             $table->bigIncrements('id');
             $table->string('queue')->index();
             $table->longText('payload');
@@ -19,7 +19,7 @@ App::getInstance()->singleton('queue', function ($app) {
     }
 
     if (!$app->get('db')->schema()->hasTable('waffle_queue_logs')) {
-        $app->get('db')->schema()->create('waffle_queue_logs', function ($table) {
+        $app->get('db')->schema()->create('waffle_queue_logs', function ($table): void {
             $table->bigIncrements('id');
             $table->text('queue');
             $table->longText('payload');
