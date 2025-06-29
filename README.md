@@ -416,7 +416,7 @@ Reference: https://laravel.com/docs/12.x/helpers#uri
 ```php
 <?php
 
-$uri = Uri::of('https://example.com')
+$uri = waffle_benchmark()->of('https://example.com')
     ->withScheme('https')
     ->withHost('test.com')
     ->withPort(8000)
