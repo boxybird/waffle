@@ -94,7 +94,7 @@ if (!function_exists('waffle_str')) {
 if (!function_exists('waffle_arr')) {
     function waffle_arr(): Arr
     {
-        return new Arr();
+        return new Arr;
     }
 }
 
@@ -108,7 +108,7 @@ if (!function_exists('waffle_benchmark')) {
 if (!function_exists('waffle_uri')) {
     function waffle_uri(): Uri
     {
-        return new Uri();
+        return new Uri;
     }
 }
 
@@ -157,6 +157,6 @@ if (!function_exists('waffle_schedule')) {
 if (!function_exists('waffle_carbon')) {
     function waffle_carbon(): Carbon
     {
-        return new Carbon();
+        return new Carbon;
     }
 }
