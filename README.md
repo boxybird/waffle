@@ -119,6 +119,9 @@ waffle_queue()->push(LongRunningJob::class, ['how_long' => 5]);
 // Push a job onto a custom queue
 waffle_queue()->push(LongRunningJob::class, ['how_long' => 5], 'my_custom_queue');
 
+// Process the next job on the default queue immediately. Note: This is a blocking call. 
+waffle_worker()->runNextJob();
+
 // Run the default queue worker in the background
 waffle_worker()->work();
 
@@ -156,7 +159,7 @@ waffle_worker(['my_custom_queue', 'default'])->work(); // This will run
 <?php
 
 waffle_schedule()->call(function () {
-    // Run code
+    // Run code... Ex: waffle_worker()->runNextJob();
 })->everyMinute();
 
 // ->everyFiveMinutes()
