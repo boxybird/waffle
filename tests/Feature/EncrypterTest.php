@@ -1,6 +1,6 @@
 <?php
 
-test('can encrypt and then decrypt', function () {
+test('it can encrypt and decrypt a string', function () {
     $encrypted = waffle_encrypter()->encrypt('Some secret');
     $decrypted = waffle_encrypter()->decrypt($encrypted);
 

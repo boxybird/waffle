@@ -1,6 +1,6 @@
 <?php
 
-test('can create database table', function () {
+test('it can create a database table', function () {
     if (!waffle_db()->schema()->hasTable('waffle_custom_table')) {
         waffle_db()->schema()->create('waffle_custom_table', function ($table) {
             $table->increments('id');
@@ -17,7 +17,7 @@ test('can create database table', function () {
     expect($exists)->toBeTrue();
 });
 
-test('can insert row', function () {
+test('it can insert a row into a database table', function () {
     waffle_db()->table('waffle_custom_table')->insert([
         'user_id' => 1,
         'extra_user_content' => 'Some extra content about the user.',
@@ -30,13 +30,13 @@ test('can insert row', function () {
         ->and($row->extra_user_content)->toBe('Some extra content about the user.');
 });
 
-test('can select row', function () {
+test('it can select a row from a database table', function () {
     $row = waffle_db()->table('waffle_custom_table')->first();
 
     expect($row->user_id)->toBe(1);
 });
 
-test('can update row', function () {
+test('it can update a row in a database table', function () {
     waffle_db()->table('waffle_custom_table')->update([
         'extra_user_content' => 'Some extra content about the user.',
     ]);
@@ -46,7 +46,7 @@ test('can update row', function () {
     expect($row->extra_user_content)->toBe('Some extra content about the user.');
 });
 
-test('can delete row', function () {
+test('it can delete a row from a database table', function () {
     waffle_db()->table('waffle_custom_table')->delete();
 
     $row = waffle_db()->table('waffle_custom_table')->first();
@@ -54,7 +54,7 @@ test('can delete row', function () {
     expect($row)->toBeNull();
 });
 
-test('can delete database table', function () {
+test('it can delete a database table', function () {
     waffle_db()->schema()->dropIfExists('waffle_custom_table');
 
     $exists = waffle_db()->schema()->hasTable('waffle_custom_table');

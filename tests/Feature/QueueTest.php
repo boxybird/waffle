@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-test('can push to queue', function () {
+test('it can push a job to the queue', function () {
     class JobTest
     {
         public function fire($job, $data)

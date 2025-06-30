@@ -1,6 +1,6 @@
 <?php
 
-test('can build uri', function () {
+test('it can build a uri with all its components', function () {
     $uri = waffle_uri()->of('https://example.com')
         ->withScheme('https')
         ->withHost('test.com')

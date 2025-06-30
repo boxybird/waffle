@@ -1,6 +1,6 @@
 <?php
 
-test('can run schedule', function () {
+test('it can run a scheduled task', function () {
     $value = 1;
 
     waffle_schedule()->call(function () use (&$value) {

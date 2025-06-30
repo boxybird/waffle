@@ -1,6 +1,6 @@
 <?php
 
-test('can get a response', function () {
+test('it can get a successful response from a given url', function () {
     $url = get_bloginfo('url');
 
     $response = waffle_http()->get($url);

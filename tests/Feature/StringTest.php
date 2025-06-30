@@ -1,6 +1,6 @@
 <?php
 
-test('str work', function () {
+test('it can chain multiple string manipulations', function () {
     $string = waffle_str('hello world')
         ->replace('world', 'universe')
         ->snake()
