@@ -215,7 +215,9 @@ class Worker extends QueueWorker
             }
         }
 
+        // MY ADDED CODE
         return null;
+        // END MY ADDED CODE
     }
 
     /**
