@@ -3,12 +3,11 @@
 namespace BoxyBird\Waffle;
 
 use Exception;
-use BoxyBird\Waffle\App;
-use Illuminate\Queue\WorkerOptions;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Queue\Worker as QueueWorker;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Queue\Factory as QueueManager;
+use Illuminate\Queue\Worker as QueueWorker;
+use Illuminate\Queue\WorkerOptions;
 
 class Worker extends QueueWorker
 {
@@ -24,17 +23,17 @@ class Worker extends QueueWorker
      * @see Illuminate\Queue\WorkerOptions
      */
     protected $default_options = [
-        'name'          => 'default',
-        'backoff'       => 0,
-        'memory'        => 128,
-        'sleep'         => 0,
-        'maxTries'      => 1,
-        'force'         => false,
+        'name' => 'default',
+        'backoff' => 0,
+        'memory' => 128,
+        'timeout' => 60,
+        'sleep' => 0,
+        'maxTries' => 1,
+        'force' => false,
         'stopWhenEmpty' => true,
-        'maxJobs'       => 500,
-        'rest'          => 0,
-        'maxTime'       => 60,
-        // 'timeout'    => Default valued handled by method $this->calculatorDefaultTimeout()
+        'maxJobs' => 500,
+        'maxTime' => 60,
+        'rest' => 0,
     ];
 
     public function __construct(
@@ -57,12 +56,12 @@ class Worker extends QueueWorker
 
         return $this;
     }
-    
+
     public function addSchedule(array $schedules): array
     {
         $schedules['waffle_worker_daemon_schedule'] = [
             'interval' => 60,
-            'display'  => 'Every Minute',
+            'display' => 'Every Minute',
         ];
 
         return $schedules;
@@ -142,10 +141,10 @@ class Worker extends QueueWorker
             // Before reserving any jobs, we will make sure this queue is not paused and
             // if it is we will just pause this worker for a given amount of time and
             // make sure we do not need to kill this worker process off completely.
-            if (! $this->daemonShouldRun($options, $connectionName, $queue)) {
+            if (!$this->daemonShouldRun($options, $connectionName, $queue)) {
                 $status = $this->pauseWorker($options, $lastRestart);
 
-                if (! is_null($status)) {
+                if (!is_null($status)) {
                     return $this->stop($status);
                 }
 
@@ -211,12 +210,63 @@ class Worker extends QueueWorker
             // MY ADDED CODE "&& empty($this->queues)"
             // In addition to $status logic, stop the
             // daemon if there are no more queues to process
-            if (! is_null($status) && empty($this->queues)) {
+            if (!is_null($status) && empty($this->queues)) {
                 return $this->stop($status);
             }
         }
 
         return null;
+    }
+
+    /**
+     *  Copied to override the parent Illuminate\Queue\Worker::runNextJob method
+     *
+     * Process the next job on the queue.
+     *
+     * @param  string  $connectionName
+     * @param  string  $queue
+     * @return void
+     */
+    public function runNextJob($connectionName = 'default', $queue = 'default', WorkerOptions $options = null)
+    {
+        // MY ADDED CODE
+        if (!$options instanceof \Illuminate\Queue\WorkerOptions) {
+            $this->default_options['timeout'] = $this->calculatorDefaultTimeout();
+
+            $options = array_merge($this->default_options, $this->options);
+
+            $options = new WorkerOptions(
+                $options['name'],
+                $options['backoff'],
+                $options['memory'],
+                $options['timeout'],
+                $options['sleep'],
+                $options['maxTries'],
+                $options['force'],
+                $options['stopWhenEmpty'],
+                $options['maxJobs'],
+                $options['maxTime'],
+                $options['rest'],
+            );
+        }
+        // END MY ADDED CODE
+
+        $job = $this->getNextJob(
+            $this->manager->connection($connectionName), $queue
+        );
+
+        // If we're able to pull a job off of the stack, we will process it and then return
+        // from this method. If there is no job on the queue, we will "sleep" the worker
+        // for the specified number of seconds, then keep processing jobs after sleep.
+        if ($job) {
+            return $this->runJob($job, $connectionName, $options);
+        }
+
+        $this->sleep($options->sleep);
+
+        // MY ADDED CODE
+        return null;
+        // END MY ADDED CODE
     }
 
     protected function calculatorDefaultTimeout(): int
@@ -233,9 +283,9 @@ class Worker extends QueueWorker
     protected function handleExceptionDatabaseLogging(\Throwable $e)
     {
         $this->app->get('db')->table('waffle_queue_logs')->insert([
-            'queue'      => $this->current_queue,
-            'payload'    => $this->current_job ? $this->current_job->getRawBody() : null,
-            'exception'  => $e->getMessage(),
+            'queue' => $this->current_queue,
+            'payload' => $this->current_job ? $this->current_job->getRawBody() : null,
+            'exception' => $e->getMessage(),
         ]);
     }
 }
