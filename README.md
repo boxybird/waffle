@@ -40,6 +40,8 @@ composer require boxybird/waffle
 
 [waffle_uri](#waffle_uri)
 
+[waffle_carbon](#waffle_carbon)
+
 [waffle_benchmark](#waffle_benchmark)
 
 ---
@@ -450,6 +452,16 @@ $uri = waffle_benchmark()->of('https://example.com')
     ->withFragment('section-1');
 
 echo $uri; // 'https://test.com:8000/users?page=2#section-1'
+```
+
+## waffle_carbon
+
+Reference: https://carbon.nesbot.com/docs/
+```php
+<?php
+
+$mutable = waffle_carbon()->now();
+$immutable = waffle_carbon()->toImmutable()->now();
 ```
 
 ## waffle_benchmark
