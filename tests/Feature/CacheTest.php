@@ -26,6 +26,33 @@ test('it can delete a value from the cache', function () {
     expect($cache)->toBeTrue();
 });
 
+test('it returns null when retrieving a non-existent value', function () {
+    $cache = waffle_cache()->get('non_existent_key');
+
+    expect($cache)->toBeNull();
+});
+
+test('it returns the cached value from remember without executing the closure', function () {
+    waffle_cache()->put('remember_me', 'I am here', 10);
+
+    $cache = waffle_cache()->remember('remember_me', 10, function () {
+        return 'A different value';
+    });
+
+    expect($cache)->toBe('I am here');
+});
+
+test('it can store and retrieve different data types', function () {
+    waffle_cache()->put('array', ['a', 'b'], 10);
+    waffle_cache()->put('int', 123, 10);
+    waffle_cache()->put('bool', true, 10);
+
+    expect(waffle_cache()
+        ->get('array'))->toBe(['a', 'b'])
+        ->and(waffle_cache()->get('int'))->toBe(123)
+        ->and(waffle_cache()->get('bool'))->toBeTrue();
+});
+
 test('it can flush the entire cache', function () {
     $cache = waffle_cache()->flush();
 
