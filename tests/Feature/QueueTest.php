@@ -2,23 +2,30 @@
 
 namespace Tests\Feature;
 
-test('it can push a job to the queue', function () {
-    class JobTest
-    {
-        public function fire($job, $data)
-        {
-            $job->delete();
-        }
-    }
+use Illuminate\Queue\WorkerOptions;
 
-    waffle_queue()->push(JobTest::class, ['foo' => 'bar']);
+class QueueTest
+{
+    public function fire($job, $data)
+    {
+        $job->delete();
+    }
+}
+
+test('it can push a job to the queue', function () {
+    waffle_queue()->push(QueueTest::class, ['foo' => 'bar']);
 
     $job = waffle_db()->table('waffle_queue')
         ->where('payload', 'LIKE', '%"data":{"foo":"bar"}%')
         ->first();
 
     expect($job)->not()->toBeNull();
+});
 
-    // Cleanup
-    waffle_db()->table('waffle_queue')->truncate();
+test('it can process the next job on the queue', function () {
+    waffle_worker()->runNextJob();
+
+    $job = waffle_db()->table('waffle_queue')->first();
+
+    expect($job)->toBeNull();
 });
