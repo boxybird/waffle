@@ -101,7 +101,7 @@ if (!function_exists('waffle_arr')) {
 if (!function_exists('waffle_benchmark')) {
     function waffle_benchmark(): Benchmark
     {
-        return new Benchmark();
+        return new Benchmark;
     }
 }
 
