@@ -80,6 +80,11 @@ require __DIR__.'/bindings/request.php';
 require __DIR__.'/bindings/encrypter.php';
 
 /**
+ * Require the router binding
+ */
+require __DIR__.'/bindings/router.php';
+
+/**
  * Require helper functions
  */
 require_once __DIR__.'/inc/functions.php';

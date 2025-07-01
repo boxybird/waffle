@@ -18,6 +18,8 @@ composer require boxybird/waffle
 
 [waffle_db](#waffle_db)
 
+[waffle_router](#waffle_router)
+
 [waffle_validator](#waffle_validator)
 
 [waffle_encrypter](#waffle_encrypter)
@@ -203,6 +205,26 @@ $query = waffle_db()
     ->select('wp_users.*', 'waffle_custom_table.extra_user_content')
     ->where('waffle_custom_table.user_id', get_current_user_id())
     ->get();
+```
+
+## waffle_router
+
+Reference: https://laravel.com/docs/12.x/routing
+```php
+<?php
+
+waffle_router(function ($router) {
+    $router->group(['prefix' => 'custom/v1/'], function ($router) {
+        $router->get('/', fn() => ['method' => 'GET']);
+        $router->post('/', fn() => ['method' => 'POST']);
+        $router->put('/', fn() => ['method' => 'PUT']);
+        $router->patch('/', fn() => ['method' => 'PATCH']);
+        $router->delete('/', fn() => ['method' => 'DELETE']);
+    });
+});
+
+// Ideally `waffle_router` should be called within `template_redirect`
+add_action('template_redirect', function () { waffle_router(...) };
 ```
 
 ## waffle_validator

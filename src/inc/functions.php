@@ -66,6 +66,35 @@ if (!function_exists('waffle_session')) {
     }
 }
 
+if (!function_exists('waffle_router')) {
+    function waffle_router(callable|array $callback = null, bool $exit = true): void
+    {
+        try {
+            $router = App::getInstance()->make('router');
+
+            // Check for a [class, method] array and instantiate the class.
+            if (is_array($callback) && isset($callback[0], $callback[1]) && is_string($callback[0])) {
+                $class = new $callback[0];
+                $method = $callback[1];
+                $class->$method($router);
+            } elseif (is_callable($callback)) {
+                // Otherwise, assume it's a standard callable like a closure.
+                call_user_func($callback, $router);
+            }
+
+            $response = $router->dispatch(App::getInstance()->make('request'));;
+
+            $response->send();
+
+            if ($exit) {
+                exit;
+            }
+        } catch (Exception) {
+            return;
+        }
+    }
+}
+
 if (!function_exists('waffle_cache')) {
     function waffle_cache(): CacheManager
     {
