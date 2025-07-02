@@ -54,7 +54,7 @@ class Scheduler
 
     public function call(callable $callback): self
     {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
 
         if (!isset($backtrace[0]['file'], $backtrace[0]['line'])) {
             throw new \Exception('Could not determine a unique ID for the scheduled job.');
