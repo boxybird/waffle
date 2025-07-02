@@ -1,15 +1,13 @@
 <?php
 
 test('it can handle a basic GET request', function () {
-    $response = null;
+    $request = waffle_app()->make('request');
 
-    waffle_router(function ($router) use (&$response) {
-        $router->get('/', function () use (&$response) {
-            $response = 'Hello World';
-
-            return 'Hello World';
-        });
+    waffle_router(function ($router) {
+        $router->get('/', fn() => 'Hello World');
     }, false);
 
-    expect($response)->toBe('Hello World');
+    $response = waffle_app()->make('router')->dispatch($request);
+
+    expect($response->getContent())->toBe('Hello World');
 });
