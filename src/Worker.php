@@ -284,7 +284,11 @@ class Worker extends QueueWorker
 
     protected function handleExceptionDatabaseLogging(\Throwable $e)
     {
-        $this->app->get('db')->table('waffle_queue_logs')->insert([
+        global $wpdb;
+
+        $table_name = $wpdb->prefix.'waffle_queue_logs';
+
+        $this->app->get('db')->table($table_name)->insert([
             'queue' => $this->current_queue,
             'payload' => $this->current_job ? $this->current_job->getRawBody() : null,
             'exception' => $e->getMessage(),

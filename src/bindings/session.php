@@ -7,8 +7,12 @@ use Illuminate\Session\SessionManager;
  * Bind session instance to container
  */
 App::getInstance()->singleton('session', function ($app): SessionManager {
-    if (!$app->get('db')->schema()->hasTable('waffle_sessions')) {
-        $app->get('db')->schema()->create('waffle_sessions', function ($table): void {
+    global $wpdb;
+
+    $table_name = $wpdb->prefix.'waffle_sessions';
+
+    if (!$app->get('db')->schema()->hasTable($table_name)) {
+        $app->get('db')->schema()->create($table_name, function ($table): void {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();

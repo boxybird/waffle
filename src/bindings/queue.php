@@ -6,8 +6,13 @@ use Illuminate\Database\ConnectionResolver;
 use Illuminate\Queue\Capsule\Manager as Queue;
 
 App::getInstance()->singleton('queue', function ($app) {
-    if (!$app->get('db')->schema()->hasTable('waffle_queue')) {
-        $app->get('db')->schema()->create('waffle_queue', function ($table): void {
+    global $wpdb;
+
+    $table_name_queue = $wpdb->prefix.'waffle_queue';
+    $table_name_logs = $wpdb->prefix.'waffle_queue_logs';
+
+    if (!$app->get('db')->schema()->hasTable($table_name_queue)) {
+        $app->get('db')->schema()->create($table_name_queue, function ($table): void {
             $table->bigIncrements('id');
             $table->string('queue')->index();
             $table->longText('payload');
@@ -18,8 +23,8 @@ App::getInstance()->singleton('queue', function ($app) {
         });
     }
 
-    if (!$app->get('db')->schema()->hasTable('waffle_queue_logs')) {
-        $app->get('db')->schema()->create('waffle_queue_logs', function ($table): void {
+    if (!$app->get('db')->schema()->hasTable($table_name_logs)) {
+        $app->get('db')->schema()->create($table_name_logs, function ($table): void {
             $table->bigIncrements('id');
             $table->text('queue');
             $table->longText('payload');
@@ -32,7 +37,7 @@ App::getInstance()->singleton('queue', function ($app) {
 
     $queue->addConnection([
         'driver' => 'database',
-        'table' => 'waffle_queue',
+        'table' => $table_name_queue,
         'queue' => 'default',
         'connection' => 'default',
         'host' => 'localhost',

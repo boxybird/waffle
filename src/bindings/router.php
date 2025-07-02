@@ -13,9 +13,7 @@ App::getInstance()->singleton('router', function ($app): Router {
 
     $app->singleton(CallableDispatcherContract::class, fn($app): CallableDispatcher => new CallableDispatcher($app));
 
-    $app->singleton(UrlGenerator::class, function ($app) use ($router) {
-        return new UrlGenerator($router->getRoutes(), $app->make('request'));
-    });
+    $app->singleton(UrlGenerator::class, fn($app): \Illuminate\Routing\UrlGenerator => new UrlGenerator($router->getRoutes(), $app->make('request')));
 
     $app->bind('redirect', fn($app): Redirector => new Redirector($app->make(UrlGenerator::class)));
 
