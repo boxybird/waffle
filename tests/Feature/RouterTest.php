@@ -1,13 +1,83 @@
 <?php
 
+use Illuminate\Http\Request;
+
 test('it can handle a basic GET request', function () {
-    $request = waffle_app()->make('request');
+    $_SERVER['REQUEST_METHOD'] = 'GET';
+    $_SERVER['REQUEST_URI'] = '/test';
+
+    $request = waffle_app()->instance(Request::class, Request::capture());
 
     waffle_router(function ($router) {
-        $router->get('/', fn() => 'Hello World');
+        $router->get('/test', fn() => 'Hello from GET');
     }, false);
 
     $response = waffle_app()->make('router')->dispatch($request);
 
-    expect($response->getContent())->toBe('Hello World');
+    expect($response->getContent())->toBe('Hello from GET')
+        ->and($response->getStatusCode())->toBe(200);
+});
+
+test('it can handle a basic POST request', function () {
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+    $_SERVER['REQUEST_URI'] = '/test';
+
+    $request = waffle_app()->instance(Request::class, Request::capture());
+
+    waffle_router(function ($router) {
+        $router->post('/test', fn() => 'Hello from POST');
+    }, false);
+
+    $response = waffle_app()->make('router')->dispatch($request);
+
+    expect($response->getContent())->toBe('Hello from POST')
+        ->and($response->getStatusCode())->toBe(200);
+});
+
+test('it can handle a basic PUT request', function () {
+    $_SERVER['REQUEST_METHOD'] = 'PUT';
+    $_SERVER['REQUEST_URI'] = '/test';
+
+    $request = waffle_app()->instance(Request::class, Request::capture());
+
+    waffle_router(function ($router) {
+        $router->put('/test', fn() => 'Hello from PUT');
+    }, false);
+
+    $response = waffle_app()->make('router')->dispatch($request);
+
+    expect($response->getContent())->toBe('Hello from PUT')
+        ->and($response->getStatusCode())->toBe(200);
+});
+
+test('it can handle a basic PATCH request', function () {
+    $_SERVER['REQUEST_METHOD'] = 'PATCH';
+    $_SERVER['REQUEST_URI'] = '/test';
+
+    $request = waffle_app()->instance(Request::class, Request::capture());
+
+    waffle_router(function ($router) {
+        $router->patch('/test', fn() => 'Hello from PATCH');
+    }, false);
+
+    $response = waffle_app()->make('router')->dispatch($request);
+
+    expect($response->getContent())->toBe('Hello from PATCH')
+        ->and($response->getStatusCode())->toBe(200);
+});
+
+test('it can handle a basic DELETE request', function () {
+    $_SERVER['REQUEST_METHOD'] = 'DELETE';
+    $_SERVER['REQUEST_URI'] = '/test';
+
+    $request = waffle_app()->instance(Request::class, Request::capture());
+
+    waffle_router(function ($router) {
+        $router->delete('/test', fn() => 'Hello from DELETE');
+    }, false);
+
+    $response = waffle_app()->make('router')->dispatch($request);
+
+    expect($response->getContent())->toBe('Hello from DELETE')
+        ->and($response->getStatusCode())->toBe(200);
 });
