@@ -37,7 +37,6 @@
   },
   "require": {
     "guzzlehttp/guzzle": "^7.9.2",
-    "illuminate/container": "^v12.2.0",
     "illuminate/support": "^12.2.0",
     "illuminate/database": "^12.2.0",
     "illuminate/translation": "^12.2.0",
@@ -58,7 +57,8 @@
     "league/flysystem": "^3.29.0",
     "league/flysystem-aws-s3-v3": "^3.29.0",
     "league/uri": "^7.5",
-    "illuminate/routing": "^12.19"
+    "illuminate/routing": "^12.19",
+    "illuminate/container": "^12.19"
   },
   "require-dev": {
     "pestphp/pest": "^3.8",
