@@ -2,7 +2,7 @@
 
 ## Important note
 
-This tool brings the power of Laravel's [Illuminate](https://github.com/illuminate) packages to your project. However, it's important to know that it doesn't include every single feature from Laravel. The examples below will give you a good idea of what's possible, but they don't cover everything.
+This tool brings the power of Laravel's [Illuminate](https://github.com/illuminate) packages to your WordPress project. However, it's important to know that it doesn't include every single feature from Laravel. The examples below will give you a good idea of what's possible, but they don't cover everything.
 
 As a specific example, `waffle_cache()->flexible('...')` will not work because Waffle does not yet support Laravel's `Deferred` functionality. If you plan to explore addition features, please test first.
 
