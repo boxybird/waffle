@@ -54,11 +54,13 @@ if (!wp_next_scheduled('waffle_delete_expired_sessions')) {
  * Cleanup expired sessions
  */
 add_action('waffle_delete_expired_sessions', function (): void {
+    global $wpdb;
+
     $app = BoxyBird\Waffle\App::getInstance();
 
     $lifetime = $app->get('config')->get('session.lifetime');
 
-    $app->get('db')->table('waffle_sessions')
+    $app->get('db')->table($wpdb->prefix.'waffle_sessions')
         ->where('last_activity', '<', time() - ($lifetime * 60))
         ->delete();
 });
