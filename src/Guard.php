@@ -2,13 +2,16 @@
 
 namespace BoxyBird\Waffle;
 
+use WP_Error;
+use WP_User;
+
 class Guard
 {
     /**
      * The current user.
      *
      */
-    protected $user;
+    protected ?WP_User $user = null;
 
     public function __construct()
     {
@@ -20,7 +23,7 @@ class Guard
      *
      * @return bool
      */
-    public function check()
+    public function check(): bool
     {
         return is_user_logged_in();
     }
@@ -48,10 +51,8 @@ class Guard
 
     /**
      * Get the ID for the currently authenticated user.
-     *
-     * @return int|string|null
      */
-    public function id()
+    public function id(): ?int
     {
         if (!$this->check()) {
             return null;
@@ -63,7 +64,7 @@ class Guard
     /**
      * Validate a user's credentials.
      */
-    public function validate(array $credentials = []): \WP_Error|\WP_User
+    public function validate(array $credentials = []): WP_Error|WP_User
     {
         return wp_authenticate_username_password($this->user, $credentials['username'], $credentials['password']);
     }
