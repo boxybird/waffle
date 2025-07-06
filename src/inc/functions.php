@@ -2,7 +2,6 @@
 
 use BoxyBird\Waffle\App;
 use BoxyBird\Waffle\Scheduler;
-use BoxyBird\Waffle\Worker;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Config\Repository;
 use Illuminate\Database\Capsule\Manager;
@@ -170,16 +169,25 @@ if (!function_exists('waffle_queue')) {
 }
 
 if (!function_exists('waffle_worker')) {
-    function waffle_worker(array $queues = ['default']): Worker
+    /**
+     * Process jobs for the given queues.
+     *
+     * This worker will process all available jobs on the specified
+     * queues and then exit.
+     *
+     * @param  array  $queues  The names of the queues to process.
+     * @return void
+     */
+    function waffle_worker(array $queues = ['default'])
     {
-        return App::getInstance()->make('queue.worker')->setQueues($queues);
+        return App::getInstance()->make('queue.worker', $queues);
     }
 }
 
 if (!function_exists('waffle_schedule')) {
     function waffle_schedule(): Scheduler
     {
-        return new Scheduler;
+        return App::getInstance()->make(Scheduler::class);
     }
 };
 
