@@ -3,8 +3,11 @@
 /**
  * Defer creating and sending session cookie until WordPress is ready
  */
+
+use BoxyBird\Waffle\App;
+
 add_action('send_headers', function (): void {
-    $app = BoxyBird\Waffle\App::getInstance();
+    $app = App::getInstance();
 
     $config = $app->get('config');
     $session_manager = $app->get('session');
@@ -38,7 +41,7 @@ add_action('send_headers', function (): void {
  * Defer saving session until last possible moment
  */
 add_action('wp_footer', function (): void {
-    $app = BoxyBird\Waffle\App::getInstance();
+    $app = App::getInstance();
 
     $app->get('session')->save();
 }, PHP_INT_MAX);
@@ -56,7 +59,7 @@ if (!wp_next_scheduled('waffle_delete_expired_sessions')) {
 add_action('waffle_delete_expired_sessions', function (): void {
     global $wpdb;
 
-    $app = BoxyBird\Waffle\App::getInstance();
+    $app = App::getInstance();
 
     $lifetime = $app->get('config')->get('session.lifetime');
 
