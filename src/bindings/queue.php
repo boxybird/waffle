@@ -13,7 +13,7 @@ App::getInstance()->singleton('queue', function ($app) {
     $table_queue_cache_key = 'waffle_queue_table_exists';
     $table_logs_cache_key = 'waffle_queue_logs_table_exists';
 
-    if (wp_cache_get($table_queue_cache_key, $cache_group) !== true) {
+    if (wp_cache_get($table_queue_cache_key, $cache_group) !== '1') {
         if (!$app->get('db')->schema()->hasTable($table_name_queue)) {
             $app->get('db')->schema()->create($table_name_queue, function ($table): void {
                 $table->bigIncrements('id');
@@ -26,10 +26,10 @@ App::getInstance()->singleton('queue', function ($app) {
             });
         }
 
-        wp_cache_set($table_queue_cache_key, true, $cache_group);
+        wp_cache_set($table_queue_cache_key, '1', $cache_group);
     }
 
-    if (wp_cache_get($table_logs_cache_key, $cache_group) !== true) {
+    if (wp_cache_get($table_logs_cache_key, $cache_group) !== '1') {
         if (!$app->get('db')->schema()->hasTable($table_name_logs)) {
             $app->get('db')->schema()->create($table_name_logs, function ($table): void {
                 $table->bigIncrements('id');
@@ -39,8 +39,8 @@ App::getInstance()->singleton('queue', function ($app) {
                 $table->timestamp('failed_at')->useCurrent();
             });
         }
- 
-        wp_cache_set($table_logs_cache_key, true, $cache_group);
+
+        wp_cache_set($table_logs_cache_key, '1', $cache_group);
     }
 
     $queue = new Queue($app);

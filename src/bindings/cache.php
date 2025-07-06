@@ -6,11 +6,11 @@ use Illuminate\Cache\CacheManager;
 App::getInstance()->singleton('cache', function ($app): CacheManager {
     global $wpdb;
 
-    $table_name = $wpdb->prefix . 'waffle_cache';
+    $table_name = $wpdb->prefix.'waffle_cache';
     $cache_group = 'waffle_schema';
     $cache_key = 'waffle_cache_table_exists';
 
-    if (wp_cache_get($cache_key, $cache_group) !== true) {
+    if (wp_cache_get($cache_key, $cache_group) !== '1') {
         if (!$app->get('db')->schema()->hasTable($table_name)) {
             $app->get('db')->schema()->create($table_name, function ($table): void {
                 $table->string('key')->unique();
@@ -19,7 +19,7 @@ App::getInstance()->singleton('cache', function ($app): CacheManager {
             });
         }
 
-        wp_cache_set($cache_key, true, $cache_group);
+        wp_cache_set($cache_key, '1', $cache_group);
     }
 
     return new CacheManager($app);

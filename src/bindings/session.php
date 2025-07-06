@@ -13,7 +13,7 @@ App::getInstance()->singleton('session', function ($app): SessionManager {
     $cache_group = 'waffle_schema';
     $cache_key = 'waffle_sessions_table_exists';
 
-    if (wp_cache_get($cache_key, $cache_group) !== true) {
+    if (wp_cache_get($cache_key, $cache_group) !== '1') {
         if (!$app->get('db')->schema()->hasTable($table_name)) {
             $app->get('db')->schema()->create($table_name, function ($table): void {
                 $table->string('id')->primary();
@@ -25,7 +25,7 @@ App::getInstance()->singleton('session', function ($app): SessionManager {
             });
         }
 
-        wp_cache_set($cache_key, true, $cache_group);
+        wp_cache_set($cache_key, '1', $cache_group);
     }
 
     $session_manager = new SessionManager($app);
