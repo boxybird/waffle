@@ -20,8 +20,6 @@ class Guard
 
     /**
      * Determine if the current user is authenticated.
-     *
-     * @return bool
      */
     public function check(): bool
     {
