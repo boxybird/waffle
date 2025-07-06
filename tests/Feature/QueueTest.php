@@ -51,7 +51,6 @@ test('it logs failed jobs to the database', function () {
         // We expect this exception, so we catch it and continue.
     }
 
-
     $log = waffle_db()->table('wp_waffle_queue_logs')
         ->where('exception', 'LIKE', '%This job is meant to fail.%')
         ->first();
