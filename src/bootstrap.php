@@ -7,82 +7,87 @@ if (php_sapi_name() === 'cli') {
 /**
  * Require app binding
  */
-require __DIR__.'/bindings/app.php';
+require_once __DIR__.'/bindings/app.php';
 
 /**
  * Require config binding
  */
-require __DIR__.'/bindings/config.php';
+require_once __DIR__.'/bindings/config.php';
 
 /**
  * Require exception handler binding
  */
-require __DIR__.'/bindings/exception-handler.php';
+require_once __DIR__.'/bindings/exception-handler.php';
 
 /**
  * Require files binding
  */
-require __DIR__.'/bindings/files.php';
+require_once __DIR__.'/bindings/files.php';
 
 /**
  * Require files storage binding
  */
-require __DIR__.'/bindings/storage.php';
+require_once __DIR__.'/bindings/storage.php';
 
 /**
  * Require the guard binding
  */
-require __DIR__.'/bindings/guard.php';
+require_once __DIR__.'/bindings/guard.php';
 
 /**
  * Require database binding
  */
-require __DIR__.'/bindings/db.php';
+require_once __DIR__.'/bindings/db.php';
+
+/**
+ * Require scheduler binding
+ */
+require_once __DIR__.'/bindings/scheduler.php';
 
 /**
  * Require event binding
  */
-require __DIR__.'/bindings/events.php';
+require_once __DIR__.'/bindings/events.php';
 
 /**
  * Require queue binding
  */
-require __DIR__.'/bindings/queue.php';
+require_once __DIR__.'/bindings/queue.php';
 
 /**
  * Require worker binding
  */
-require __DIR__.'/bindings/worker.php';
+require_once __DIR__.'/bindings/worker.php';
 
 /**
  * Require cache binding
  */
-require __DIR__.'/bindings/cache.php';
+require_once __DIR__.'/bindings/cache.php';
 
 /**
  * Require session binding
  */
-require __DIR__.'/bindings/session.php';
+require_once __DIR__.'/bindings/session.php';
 
 /**
  * Require validation binding
  */
-require __DIR__.'/bindings/validation.php';
+require_once __DIR__.'/bindings/validation.php';
 
 /**
  * Require the request binding
  */
-require __DIR__.'/bindings/request.php';
+require_once __DIR__.'/bindings/request.php';
 
 /**
  * Require the encrypter binding
  */
-require __DIR__.'/bindings/encrypter.php';
+require_once __DIR__.'/bindings/encrypter.php';
 
 /**
  * Require the router binding
  */
-require __DIR__.'/bindings/router.php';
+require_once __DIR__.'/bindings/router.php';
 
 /**
  * Require helper functions
