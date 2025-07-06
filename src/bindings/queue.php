@@ -1,9 +1,8 @@
 <?php
 
 use BoxyBird\Waffle\App;
-use BoxyBird\Waffle\DatabaseConnector;
-use Illuminate\Database\ConnectionResolver;
 use Illuminate\Queue\Capsule\Manager as Queue;
+use Illuminate\Queue\Connectors\DatabaseConnector;
 
 App::getInstance()->singleton('queue', function ($app) {
     global $wpdb;
@@ -43,17 +42,9 @@ App::getInstance()->singleton('queue', function ($app) {
         'host' => 'localhost',
     ]);
 
-    $queue->addConnector('database', fn(): DatabaseConnector => new DatabaseConnector($app->get('db')));
+    $queue->getQueueManager()->addConnector('database', fn(): DatabaseConnector => new DatabaseConnector($app->get('db')->getDatabaseManager()));
 
     // $queue->setAsGlobal();
 
-    $queue_manager = $queue->getQueueManager();
-
-    $resolver = new ConnectionResolver([
-        'default' => $app->get('db')->getConnection(),
-    ]);
-
-    $queue_manager->addConnector('database', fn(): DatabaseConnector => new DatabaseConnector($resolver));
-
-    return $queue_manager;
+    return $queue->getQueueManager();
 });
