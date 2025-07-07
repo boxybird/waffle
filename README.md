@@ -235,8 +235,14 @@ waffle_router(function ($router) {
     });
 });
 
-// Ideally `waffle_router` should be called within `template_redirect`
-add_action('template_redirect', function () { waffle_router(...) };
+// Ideally `waffle_router` should be called within `init` hook
+add_action('init', function () {
+    if (is_admin()) {
+        return;
+    }
+
+    waffle_router(...);
+});
 ```
 
 ## waffle_validator
