@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 
+beforeEach(function () {
+    waffle_app()->forgetInstances();
+});
+
 test('it can handle a basic GET request', function () {
     $_SERVER['REQUEST_METHOD'] = 'GET';
     $_SERVER['REQUEST_URI'] = '/test';
