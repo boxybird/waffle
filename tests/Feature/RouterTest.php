@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 beforeEach(function () {
     waffle_app()->forgetInstances();
@@ -84,4 +85,24 @@ test('it can handle a basic DELETE request', function () {
 
     expect($response->getContent())->toBe('Hello from DELETE')
         ->and($response->getStatusCode())->toBe(200);
+});
+
+test('it returns 404 for non-existent routes', function () {
+    $_SERVER['REQUEST_METHOD'] = 'GET';
+    $_SERVER['REQUEST_URI'] = '/non-existent';
+
+    $request = waffle_app()->instance(Request::class, Request::capture());
+
+    waffle_router(function ($router) {
+        $router->get('/test', fn() => 'Hello from GET');
+    }, false);
+
+    try {
+        waffle_app()->make('router')->dispatch($request);
+
+        // False positive assertion. We want to hit the "catch" block.
+        expect(true)->toBeFalse();
+    } catch (NotFoundHttpException $e) {
+        expect($e->getMessage())->toBe('The route non-existent could not be found.');
+    }
 });
