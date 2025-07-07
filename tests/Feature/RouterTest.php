@@ -106,3 +106,32 @@ test('it returns 404 for non-existent routes', function () {
         expect($e->getMessage())->toBe('The route non-existent could not be found.');
     }
 });
+
+test('it gracefully handles a NotFoundHttpException', function () {
+    $_SERVER['REQUEST_METHOD'] = 'GET';
+    $_SERVER['REQUEST_URI'] = '/non-existent-route';
+
+    waffle_app()->instance(Request::class, Request::capture());
+
+    // The waffle_router should catch the NotFoundHttpException and simply return.
+    // No exception should be thrown from this call.
+    waffle_router(function ($router) {
+        $router->get('/test', fn() => 'Hello from GET');
+    }, false);
+
+    // If we reach here, no exception was thrown, so the test passes.
+    expect(true)->toBeTrue();
+});
+
+test('it re-throws exceptions other than NotFoundHttpException', function () {
+    $_SERVER['REQUEST_METHOD'] = 'GET';
+    $_SERVER['REQUEST_URI'] = '/error';
+
+    waffle_app()->instance(Request::class, Request::capture());
+
+    waffle_router(function ($router) {
+        $router->get('/error', function () {
+            throw new Exception('Something went wrong');
+        });
+    }, false);
+})->throws(Exception::class, 'Something went wrong');

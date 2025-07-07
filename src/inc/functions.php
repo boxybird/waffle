@@ -89,8 +89,12 @@ if (!function_exists('waffle_router')) {
             if ($exit) {
                 exit;
             }
-        } catch (Exception) {
-            return; // Continue and let WordPress continue as normal
+        } catch (Exception $e) {
+            if ($e instanceof NotFoundHttpException) {
+                return;
+            }
+
+            throw $e;
         }
     }
 }
