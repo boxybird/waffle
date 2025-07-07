@@ -6,9 +6,11 @@ class Scheduler
 {
     protected static array $jobs = [];
 
+    protected ?string $hook_name = null;
+
     protected static bool $schedules_registered = false;
 
-    protected string $hook;
+    protected ?string $hook = null;
 
     public function __construct()
     {
@@ -52,17 +54,28 @@ class Scheduler
         return $schedules;
     }
 
+    public function as(string $hook_name): self
+    {
+        $this->hook_name = $hook_name;
+
+        return $this;
+    }
+
     public function call(callable $callback): self
     {
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+        if ($this->hook_name) {
+            $this->hook = $this->hook_name;
+        } else {
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
 
-        if (!isset($backtrace[0]['file'], $backtrace[0]['line'])) {
-            throw new \Exception('Could not determine a unique ID for the scheduled job.');
+            if (!isset($backtrace[0]['file'], $backtrace[0]['line'])) {
+                throw new \Exception('Could not determine a unique ID for the scheduled job.');
+            }
+
+            $caller = $backtrace[0];
+
+            $this->hook = 'waffle_schedule_'.md5($caller['file'].':'.$caller['line']);
         }
-
-        $caller = $backtrace[0];
-
-        $this->hook = 'waffle_schedule_'.md5($caller['file'].':'.$caller['line']);
 
         self::$jobs[$this->hook] = $callback;
 

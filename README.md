@@ -172,6 +172,10 @@ waffle_schedule()->call(function () {
     // Run code... Ex: waffle_worker()->runNextJob();
 })->everyMinute();
 
+waffle_schedule()->as('your_custom_hook_name')->call(function () {
+    // Run code... Ex: waffle_worker()->runNextJob();
+})->everyMinute();
+
 // ->everyFiveMinutes()
 // ->everyFifteenMinutes()
 // ->everyThirtyMinutes()
