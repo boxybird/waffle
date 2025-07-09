@@ -50,6 +50,12 @@ require_once __DIR__.'/bindings/scheduler.php';
 require_once __DIR__.'/bindings/events.php';
 
 /**
+ * Require bus binding
+ */
+require_once __DIR__.'/bindings/bus.php';
+
+
+/**
  * Require queue binding
  */
 require_once __DIR__.'/bindings/queue.php';
