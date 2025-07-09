@@ -174,15 +174,6 @@ if (!function_exists('waffle_queue')) {
 }
 
 if (!function_exists('waffle_worker')) {
-    /**
-     * Process jobs for the given queues.
-     *
-     * This worker will process all available jobs on the specified
-     * queues and then exit.
-     *
-     * @param  array  $queues  The names of the queues to process.
-     * @return void
-     */
     function waffle_worker(array $queues = ['default'])
     {
         return App::getInstance()->make('queue.worker', $queues);
