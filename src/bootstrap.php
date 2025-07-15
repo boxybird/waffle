@@ -1,8 +1,8 @@
 <?php
 
-if (php_sapi_name() === 'cli') {
-    require_once __DIR__.'/../../wp-load.php';
-}
+//if (php_sapi_name() === 'cli') {
+//    require __DIR__.'/../../wp-load.php';
+//}
 
 /**
  * Require app binding
