@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Uri;
 use Illuminate\Validation\Validator;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 if (!function_exists('waffle_app')) {
@@ -89,12 +90,8 @@ if (!function_exists('waffle_router')) {
             if ($exit) {
                 exit;
             }
-        } catch (Exception $e) {
-            if ($e instanceof NotFoundHttpException) {
-                return;
-            }
-
-            throw $e;
+        } catch (NotFoundHttpException|MethodNotAllowedHttpException $e) {
+            return;
         }
     }
 }
