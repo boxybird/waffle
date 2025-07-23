@@ -15,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Benchmark;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
 use Illuminate\Support\Uri;
 use Illuminate\Validation\Validator;
@@ -90,7 +91,7 @@ if (!function_exists('waffle_router')) {
             if ($exit) {
                 exit;
             }
-        } catch (NotFoundHttpException|MethodNotAllowedHttpException $e) {
+        } catch (NotFoundHttpException|MethodNotAllowedHttpException) {
             return;
         }
     }
@@ -188,5 +189,12 @@ if (!function_exists('waffle_carbon')) {
     function waffle_carbon(): Carbon
     {
         return new Carbon;
+    }
+}
+
+if (!function_exists('waffle_process')) {
+    function waffle_process(): Process
+    {
+        return new Process;
     }
 }
