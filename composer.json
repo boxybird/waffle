@@ -63,6 +63,7 @@
   },
   "require-dev": {
     "pestphp/pest": "^3.8",
-    "rector/rector": "^2.1"
+    "rector/rector": "^2.1",
+    "phpstan/phpstan": "^2.1"
   }
 }
