@@ -58,7 +58,8 @@
     "league/flysystem-aws-s3-v3": "^3.29.0",
     "league/uri": "^7.5",
     "illuminate/routing": "^12.19",
-    "illuminate/container": "^12.19"
+    "illuminate/container": "^12.19",
+    "illuminate/process": "^12.21"
   },
   "require-dev": {
     "pestphp/pest": "^3.8",
