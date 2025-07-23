@@ -90,6 +90,11 @@ require_once __DIR__.'/bindings/encrypter.php';
 require_once __DIR__.'/bindings/router.php';
 
 /**
+ * Require the process binding
+ */
+require_once __DIR__.'/bindings/process.php';
+
+/**
  * Require helper functions
  */
 require_once __DIR__.'/inc/functions.php';
