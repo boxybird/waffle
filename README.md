@@ -54,6 +54,8 @@ composer require boxybird/waffle
 
 [waffle_benchmark](#waffle_benchmark)
 
+[waffle_process](#waffle_process)
+
 ---
 
 ### waffle_queue / waffle_worker
@@ -517,4 +519,13 @@ waffle_benchmark()->dd([
     fn() => get_posts(),
     fn() => waffle_db()->table('wp_posts')->take(10)->get(),
 ]);
+```
+
+## waffle_process
+
+Reference: https://laravel.com/docs/12.x/processes
+```php
+<?php
+
+$output = waffle_process()::run('ls -la')->output();
 ```
