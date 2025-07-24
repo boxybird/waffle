@@ -16,6 +16,14 @@ Install the package via composer.
 composer require boxybird/waffle
 ```
 
+Boot Waffle within a theme or plugin.
+
+```
+require_once __DIR__.'/vendor/autoload.php';
+
+BoxyBird\Waffle\Waffle::boot();
+```
+
 ## Available functions
 
 [waffle_queue](#waffle_queue--waffle_worker)
