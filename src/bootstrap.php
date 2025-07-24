@@ -1,8 +1,20 @@
 <?php
 
-//if (php_sapi_name() === 'cli') {
-//    require __DIR__.'/../../wp-load.php';
-//}
+/**
+ * Bootstrap file for Waffle
+ *
+ * This file initializes the core components and bindings of Waffle.
+ * It handles conditional loading of WordPress dependencies and sets up all necessary
+ * service bindings for both testing and production environments.
+ */
+$basename = basename((string) ($_SERVER['argv'][0] ?? null));
+
+$is_testing = php_sapi_name() === 'cli'
+    && ($basename === 'pest' || $basename === 'rector');
+
+if ($is_testing) {
+    require __DIR__.'/../../wp-load.php';
+}
 
 /**
  * Require app binding
@@ -100,11 +112,17 @@ require_once __DIR__.'/bindings/process.php';
 require_once __DIR__.'/inc/functions.php';
 
 /**
- * Require Admin Pages
+ * Require files needed for WordPress only
  */
-require_once __DIR__.'/inc/admin-pages.php';
+if (!$is_testing) {
+    /**
+     * Require Admin Pages
+     */
+    require_once __DIR__.'/inc/admin-pages.php';
 
-/**
- * Require Sessions handler
- */
-require_once __DIR__.'/inc/sessions.php';
+    /**
+     *
+     * Require Sessions handler
+     */
+    require_once __DIR__.'/inc/sessions.php';
+}
