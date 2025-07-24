@@ -1,13 +1,5 @@
 <?php
 
-$wp_load = __DIR__.'/../../wp-load.php';
-
-$is_testing = file_exists($wp_load);
-
-if ($is_testing) {
-    require_once $wp_load;
-}
-
 /**
  * Require app binding
  */
@@ -104,17 +96,12 @@ require_once __DIR__.'/bindings/process.php';
 require_once __DIR__.'/inc/functions.php';
 
 /**
- * Require files if WordPress is loaded
+ * Require Admin Pages
  */
-if (function_exists('add_action')) {
-    /**
-     * Require Admin Pages
-     */
-    require_once __DIR__.'/inc/admin-pages.php';
+require_once __DIR__.'/inc/admin-pages.php';
 
-    /**
-     *
-     * Require Sessions handler
-     */
-    require_once __DIR__.'/inc/sessions.php';
-}
+/**
+ *
+ * Require Sessions handler
+ */
+require_once __DIR__.'/inc/sessions.php';
