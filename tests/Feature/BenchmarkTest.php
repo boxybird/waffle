@@ -1,9 +1,9 @@
 <?php
 
-test('it can measure the execution time of closures', function () {
+test('it can measure the execution time of closures', function (): void {
     $measure = waffle_benchmark()->measure([
-        'sleep 100 microseconds' => fn() => usleep(100),
-        'sleep 200 microseconds' => fn() => usleep(200),
+        'sleep 100 microseconds' => fn(): null => usleep(100),
+        'sleep 200 microseconds' => fn(): null => usleep(200),
     ]);
 
     expect($measure)->toMatchArray([

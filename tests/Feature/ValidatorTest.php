@@ -1,6 +1,6 @@
 <?php
 
-test('it can validate data against a set of rules', function () {
+test('it can validate data against a set of rules', function (): void {
     $nonce = wp_create_nonce('secret');
 
     $data = [

@@ -1,6 +1,6 @@
 <?php
 
-test('it can store retrieve and delete a file from storage', function () {
+test('it can store retrieve and delete a file from storage', function (): void {
     $disk = waffle_storage()->build([
         'driver' => 'local',
         'root' => __DIR__.'/../storage',

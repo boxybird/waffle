@@ -1,6 +1,6 @@
 <?php
 
-test('it creates and verifies a file with local disk driver', function () {
+test('it creates and verifies a file with local disk driver', function (): void {
     $base_root = wp_upload_dir()['basedir'];
     $base_url = wp_upload_dir()['baseurl'];
 

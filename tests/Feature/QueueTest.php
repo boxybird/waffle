@@ -8,7 +8,7 @@ use ReflectionMethod;
 
 class QueueTest
 {
-    public function fire($job, $data)
+    public function fire($job, $data): void
     {
         $job->delete();
     }
@@ -16,13 +16,13 @@ class QueueTest
 
 class FailingJobTest
 {
-    public function fire($job, $data)
+    public function fire($job, $data): never
     {
         throw new Exception('This job is meant to fail.');
     }
 }
 
-test('it can push a job to the queue', function () {
+test('it can push a job to the queue', function (): void {
     waffle_queue()->push(QueueTest::class, ['foo' => 'bar']);
 
     $job = waffle_db()->table('wp_waffle_queue')
@@ -32,7 +32,7 @@ test('it can push a job to the queue', function () {
     expect($job)->not()->toBeNull();
 });
 
-test('it can process the next job on the queue', function () {
+test('it can process the next job on the queue', function (): void {
     waffle_queue()->push(QueueTest::class, ['foo' => 'bar']);
 
     waffle_worker()->runNextJob();
@@ -42,12 +42,12 @@ test('it can process the next job on the queue', function () {
     expect($job)->toBeNull();
 });
 
-test('it logs failed jobs to the database', function () {
+test('it logs failed jobs to the database', function (): void {
     waffle_queue()->push(FailingJobTest::class, ['foo' => 'baz']);
 
     try {
         waffle_worker()->runNextJob();
-    } catch (Exception $e) {
+    } catch (Exception) {
         // We expect this exception, so we catch it and continue.
     }
 
@@ -62,7 +62,7 @@ test('it logs failed jobs to the database', function () {
     waffle_db()->table('wp_waffle_queue_logs')->truncate();
 });
 
-test('it respects custom worker options', function () {
+test('it respects custom worker options', function (): void {
     $worker = waffle_worker()->setOptions(['timeout' => 120, 'maxTries' => 3]);
 
     $get_worker_options = new ReflectionMethod($worker, 'getWorkerOptions');
@@ -74,7 +74,7 @@ test('it respects custom worker options', function () {
         ->and($worker_options->maxTries)->toBe(3);
 });
 
-test('it calculates default timeout from ini settings', function () {
+test('it calculates default timeout from ini settings', function (): void {
     $worker = waffle_worker();
 
     $calculator_default_timeout = new ReflectionMethod($worker, 'calculatorDefaultTimeout');
