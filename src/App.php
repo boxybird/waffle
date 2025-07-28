@@ -37,7 +37,7 @@ class App extends Container implements Application
      */
     public function environment(...$environments): string|bool
     {
-        if (empty($environments)) {
+        if ($environments === []) {
             return 'waffle';
         }
 
