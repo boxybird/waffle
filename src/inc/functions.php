@@ -9,6 +9,7 @@ use Illuminate\Encryption\Encrypter;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Queue\DatabaseQueue;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\Arr;
@@ -165,7 +166,7 @@ if (!function_exists('waffle_storage')) {
 }
 
 if (!function_exists('waffle_queue')) {
-    function waffle_queue(): QueueManager
+    function waffle_queue(): QueueManager|DatabaseQueue
     {
         return App::getInstance()->make('queue');
     }
