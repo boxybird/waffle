@@ -1,8 +1,8 @@
 <?php
 
 test('it can create a carbon instance and format a date for humans', function (): void {
-    $initial = waffle_carbon()->now()->subMonths(5);
+    $initial = waffle_carbon()->now()->subDays(20);
     $carbon = waffle_carbon()->setDate($initial->year, $initial->month, $initial->day)->diffForHumans();
 
-    expect($carbon)->toBe('5 months ago');
+    expect($carbon)->toBe('2 weeks ago');
 });
