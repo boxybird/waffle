@@ -135,7 +135,7 @@ class Scheduler
     public function twiceDaily(): void
     {
         if (!wp_next_scheduled($this->hook)) {
-            wp_schedule_event(time(), 'twiceDaily', $this->hook);
+            wp_schedule_event(time(), 'twicedaily', $this->hook);
         }
     }
 
