@@ -38,9 +38,9 @@ add_action('send_headers', function (): void {
 });
 
 /**
- * Defer saving session until last possible moment
+ * Defer saving session until the last possible moment
  */
-add_action('wp_footer', function (): void {
+add_action('shutdown', function (): void {
     $app = App::getInstance();
 
     $app->get('session')->save();
