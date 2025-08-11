@@ -15,7 +15,9 @@ class Guard
 
     public function __construct()
     {
-        $this->user = wp_get_current_user();
+        if (function_exists('wp_get_current_user')) {
+            $this->user = wp_get_current_user();
+        }
     }
 
     /**
@@ -23,6 +25,10 @@ class Guard
      */
     public function check(): bool
     {
+        if (!function_exists('is_user_logged_in')) {
+            return false;
+        }
+
         return is_user_logged_in();
     }
 
@@ -31,6 +37,10 @@ class Guard
      */
     public function guest(): bool
     {
+        if (!function_exists('is_user_logged_in')) {
+            return true;
+        }
+
         return !is_user_logged_in();
     }
 
@@ -62,7 +72,7 @@ class Guard
     /**
      * Validate a user's credentials.
      */
-    public function validate(array $credentials = []): WP_Error|WP_User
+    public function validate(array $credentials = []): WP_Error|WP_User|null
     {
         return wp_authenticate_username_password($this->user, $credentials['username'], $credentials['password']);
     }
