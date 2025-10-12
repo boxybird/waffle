@@ -9,6 +9,9 @@ return RectorConfig::configure()
         __DIR__.'/src',
         __DIR__.'/tests',
     ])
+    ->withSkip([
+        __DIR__.'/src/Scheduler.php',
+    ])
     ->withPhpSets()
     ->withPreparedSets(
         deadCode: true,
