@@ -56,7 +56,8 @@ if (!wp_next_scheduled('waffle_delete_expired_sessions')) {
 /**
  * Cleanup expired sessions
  */
-add_action('waffle_delete_expired_sessions', function (): void {
+function waffle_delete_expired_sessions_callback(): void
+{
     global $wpdb;
 
     $app = App::getInstance();
@@ -66,4 +67,6 @@ add_action('waffle_delete_expired_sessions', function (): void {
     $app->get('db')->table($wpdb->prefix.'waffle_sessions')
         ->where('last_activity', '<', time() - ($lifetime * 60))
         ->delete();
-});
+}
+
+add_action('waffle_delete_expired_sessions', 'waffle_delete_expired_sessions_callback');
