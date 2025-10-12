@@ -79,7 +79,7 @@ class Scheduler
 
         self::$jobs[$this->hook] = $callback;
 
-        add_action($this->hook, self::runJob(...));
+        add_action($this->hook, [self::class, 'runJob']);
 
         return $this;
     }
