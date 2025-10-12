@@ -21,7 +21,7 @@ class Scheduler
         }
     }
 
-    public static function registerCustomSchedules($schedules): array
+    public static function registerCustomSchedules(array $schedules): array
     {
         if (!isset($schedules['every_minute'])) {
             $schedules['every_minute'] = [
