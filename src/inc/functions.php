@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 use Illuminate\Support\Uri;
 use Illuminate\Validation\Validator;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
