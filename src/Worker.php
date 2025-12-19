@@ -58,7 +58,6 @@ class Worker extends QueueWorker
      *
      * @param  string  $connectionName
      * @param  string  $queue
-     * @param  \Illuminate\Queue\WorkerOptions|null  $options
      */
     public function runNextJob($connectionName = 'default', $queue = 'default', WorkerOptions|null $options = null): void
     {
