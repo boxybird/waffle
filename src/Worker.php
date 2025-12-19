@@ -36,7 +36,7 @@ class Worker extends QueueWorker
         ExceptionHandler $handler,
         callable $isDownForMaintenance,
         protected App $app,
-        callable $resetScope = null,
+        callable|null $resetScope = null,
         protected array $queues = [],
     ) {
         parent::__construct($queue, $events, $handler, $isDownForMaintenance, $resetScope);
@@ -60,7 +60,7 @@ class Worker extends QueueWorker
      * @param  string  $queue
      * @param  \Illuminate\Queue\WorkerOptions|null  $options
      */
-    public function runNextJob($connectionName = 'default', $queue = 'default', WorkerOptions $options = null): void
+    public function runNextJob($connectionName = 'default', $queue = 'default', WorkerOptions|null $options = null): void
     {
         $worker_options = $this->getWorkerOptions();
 

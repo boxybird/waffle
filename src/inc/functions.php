@@ -71,7 +71,7 @@ if (!function_exists('waffle_session')) {
 }
 
 if (!function_exists('waffle_router')) {
-    function waffle_router(callable|array $callback = null, bool $exit = true): void
+    function waffle_router(callable|array|null $callback = null, bool $exit = true): void
     {
         try {
             $router = App::getInstance()->make('router');
