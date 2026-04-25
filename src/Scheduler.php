@@ -65,6 +65,7 @@ class Scheduler
     {
         if ($this->hook_name) {
             $this->hook = $this->hook_name;
+            $this->hook_name = null;
         } else {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
 
