@@ -388,6 +388,49 @@ if (waffle_session()->has('message')) {
 }
 ```
 
+### Sessions and full-page caching
+
+The session cookie (`wp_waffle_sessions`) is only sent on a response when:
+
+1. The session was actually used during the request (anything that resolves
+   `waffle_session()`), **or**
+2. The incoming request already carries the session cookie.
+
+A plain anonymous request that never touches the session sends **no**
+`Set-Cookie` header and writes **no** session row. This keeps such responses
+cacheable by full-page caches (Pressable batcache, Varnish, etc.), which refuse
+to serve a cached response that carries a cookie. No configuration is required —
+this is the default behavior.
+
+#### `waffle/should_send_session_cookie` filter
+
+Use this filter to **override the per-response cookie decision**. It runs once
+per request and receives the computed boolean. It does **not** enable or disable
+sessions — `waffle_session()->put()`/`get()` still work within a request
+regardless. It only controls whether the `Set-Cookie` header is written.
+
+```php
+<?php
+
+// Restore the legacy behavior: always send the cookie on every response.
+add_filter('waffle/should_send_session_cookie', '__return_true');
+
+// Or surgically keep a specific route cacheable, even if something touched the
+// session, by suppressing the cookie there. Note: the session ID then won't be
+// persisted to the browser on that response.
+add_filter('waffle/should_send_session_cookie', function (bool $send): bool {
+    return is_front_page() ? false : $send;
+});
+```
+
+> **This filter is not a master switch.** Returning `false` only stops the
+> cookie from being written on that response. The session can still be read from
+> an incoming cookie, session code still runs within the request, and the
+> `wp_waffle_sessions` table and hourly cleanup cron still exist. To turn the
+> session subsystem off entirely (no cookie, no shutdown save, no table, no
+> cron), you would need a dedicated master switch — which Waffle does not
+> currently provide. The filter is a per-response override, not a feature flag.
+
 ## waffle_storage
 
 Reference: https://laravel.com/docs/12.x/filesystem

@@ -6,10 +6,37 @@
 
 use BoxyBird\Waffle\App;
 
+/**
+ * Decide whether the session cookie should be written on this response.
+ *
+ * Only emit it when the session was actually used during this request, or the
+ * visitor already carries one. Stamping Set-Cookie on a fresh anonymous request
+ * defeats full-page caches (Pressable batcache, Varnish), which refuse to serve
+ * a cached response that carries a cookie. The `waffle/should_send_session_cookie`
+ * filter lets callers force the decision (e.g. per-route).
+ */
+if (!function_exists('waffle_should_send_session_cookie')) {
+    function waffle_should_send_session_cookie(): bool
+    {
+        $app = App::getInstance();
+
+        $cookie_name = $app->get('config')->get('session.cookie');
+
+        $should_send = $app->resolved('session') || isset($_COOKIE[$cookie_name]);
+
+        return (bool) apply_filters('waffle/should_send_session_cookie', $should_send);
+    }
+}
+
 add_action('send_headers', function (): void {
+    if (!waffle_should_send_session_cookie()) {
+        return;
+    }
+
     $app = App::getInstance();
 
     $config = $app->get('config');
+
     $session_manager = $app->get('session');
 
     $cookie = new Symfony\Component\HttpFoundation\Cookie(
@@ -43,7 +70,11 @@ add_action('send_headers', function (): void {
 add_action('shutdown', function (): void {
     $app = App::getInstance();
 
-    $app->get('session')->save();
+    // Nothing touched the session this request -> nothing to persist. Avoids a
+    // needless DB write (and an empty session row) on every anonymous hit.
+    if ($app->resolved('session')) {
+        $app->get('session')->save();
+    }
 }, PHP_INT_MAX);
 
 /**
