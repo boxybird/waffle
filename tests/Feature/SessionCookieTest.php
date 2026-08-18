@@ -118,3 +118,36 @@ test('the waffle/should_send_session_cookie filter can force the cookie off', fu
 
     expect(waffle_should_send_session_cookie())->toBeFalse();
 });
+
+test('the cleanup cron does not throw when the sessions table does not exist', function (): void {
+    // The table is created lazily on first session use, so a site that never
+    // touches the session has none. Before the guard this threw an uncaught
+    // QueryException on every hourly run.
+    waffle_delete_expired_sessions_callback('wp_waffle_sessions_missing_on_purpose');
+})->throwsNoExceptions();
+
+test('the cleanup cron deletes only expired rows from a real table', function (): void {
+    global $wpdb;
+
+    $table = $wpdb->prefix.'waffle_sessions';
+    $lifetime = App::getInstance()->get('config')->get('session.lifetime');
+
+    $fresh = str_repeat('f1e2d3c4', 5);
+    $stale = str_repeat('a9b8c7d6', 5);
+
+    $db = waffle_db();
+    $db->table($table)->whereIn('id', [$fresh, $stale])->delete();
+    $db->table($table)->insert([
+        ['id' => $fresh, 'payload' => '', 'last_activity' => time()],
+        ['id' => $stale, 'payload' => '', 'last_activity' => time() - ($lifetime * 60) - 60],
+    ]);
+
+    try {
+        waffle_delete_expired_sessions_callback();
+
+        expect($db->table($table)->where('id', $fresh)->exists())->toBeTrue()
+            ->and($db->table($table)->where('id', $stale)->exists())->toBeFalse();
+    } finally {
+        $db->table($table)->whereIn('id', [$fresh, $stale])->delete();
+    }
+});

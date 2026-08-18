@@ -119,16 +119,29 @@ if (!wp_next_scheduled('waffle_delete_expired_sessions')) {
 
 /**
  * Cleanup expired sessions
+ *
+ * The table is created lazily, the first time a session is actually used, so a
+ * site that never touches the session does not have one. Without this guard the
+ * hourly cron throws an uncaught QueryException on every run.
+ *
+ * WordPress calls action callbacks with a single empty string when `do_action()`
+ * is given no arguments, so `$table` is defaulted on empty rather than on null.
  */
-function waffle_delete_expired_sessions_callback(): void
+function waffle_delete_expired_sessions_callback(string $table = ''): void
 {
     global $wpdb;
 
     $app = App::getInstance();
 
+    $table = $table !== '' ? $table : $wpdb->prefix.'waffle_sessions';
+
+    if (!$app->get('db')->schema()->hasTable($table)) {
+        return;
+    }
+
     $lifetime = $app->get('config')->get('session.lifetime');
 
-    $app->get('db')->table($wpdb->prefix.'waffle_sessions')
+    $app->get('db')->table($table)
         ->where('last_activity', '<', time() - ($lifetime * 60))
         ->delete();
 }
