@@ -390,17 +390,53 @@ if (waffle_session()->has('message')) {
 
 ### Sessions and full-page caching
 
-The session cookie (`wp_waffle_sessions`) is only sent on a response when:
+A response carrying a `Set-Cookie` header is not stored by a full-page cache —
+Pressable's batcache bails out of caching entirely the moment it sees one — so a
+session cookie stamped onto anonymous traffic means the cache never warms for
+anybody.
 
-1. The session was actually used during the request (anything that resolves
-   `waffle_session()`), **or**
-2. The incoming request already carries the session cookie.
+Waffle therefore sends the cookie (and writes a session row) only when the
+session **holds data**:
 
-A plain anonymous request that never touches the session sends **no**
-`Set-Cookie` header and writes **no** session row. This keeps such responses
-cacheable by full-page caches (Pressable batcache, Varnish, etc.), which refuse
-to serve a cached response that carries a cookie. No configuration is required —
+| Request | `Set-Cookie` | Session row |
+| --- | --- | --- |
+| Never touches the session | no | no |
+| Only reads (`waffle_session()->get()`) | no | no |
+| Writes something (`put`, `flash`, `push`, …) | yes | yes |
+
+Starting a session is not the same as using one: Illuminate seeds every store
+with `_token` and empty `_flash` bookkeeping, so a read-only request looks
+non-empty at a glance. Those internals are ignored, which is what keeps a page
+that merely checks for a flash message cacheable. No configuration is required —
 this is the default behavior.
+
+An incoming cookie no longer forces the cookie to be re-sent on its own, so a
+visitor who used a session once is not pinned to uncached responses.
+
+> **Write to the session before output starts.** The cookie goes out with the
+> response headers, on `send_headers`. A session written from inside a rendered
+> template (`wp_footer` and friends) is too late for a cookie to be issued, and
+> will not survive to the next request. `init` and router controllers are fine.
+
+> **Note:** the cookie is named after your table prefix (`wp_waffle_sessions`),
+> and batcache skips the cache for any visitor carrying a `wp`-prefixed cookie.
+> That is deliberate: someone holding a Waffle session should not be served a
+> page cached from an anonymous visit.
+
+#### `waffle/session_has_data` filter
+
+Overrides what counts as "worth a cookie".
+
+```php
+<?php
+
+// Treat the CSRF token as meaningful, so a page rendering a form keeps its
+// session (at the cost of making those responses uncacheable).
+add_filter('waffle/session_has_data', function (bool $has_data, $session): bool {
+    return $has_data || $session->has('_token');
+}, 10, 2);
+```
+
 
 #### `waffle/should_send_session_cookie` filter
 
@@ -415,8 +451,8 @@ regardless. It only controls whether the `Set-Cookie` header is written.
 // Restore the legacy behavior: always send the cookie on every response.
 add_filter('waffle/should_send_session_cookie', '__return_true');
 
-// Or surgically keep a specific route cacheable, even if something touched the
-// session, by suppressing the cookie there. Note: the session ID then won't be
+// Or surgically keep a specific route cacheable, even if the session holds
+// data, by suppressing the cookie there. Note: the session ID then won't be
 // persisted to the browser on that response.
 add_filter('waffle/should_send_session_cookie', function (bool $send): bool {
     return is_front_page() ? false : $send;
