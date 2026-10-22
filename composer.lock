@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "194da744542c8d56e801284f82fa15d3",
+    "content-hash": "844e8ac1cbc3013903597d135027ae29",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3309,16 +3309,16 @@
         },
         {
             "name": "predis/predis",
-            "version": "v3.0.1",
+            "version": "v3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "34fb0a7da0330df1bab4280fcac4afdeeccc3edf"
+                "reference": "4d91f3b08a60c3bacc2afbd8dc41724559b7626a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/34fb0a7da0330df1bab4280fcac4afdeeccc3edf",
-                "reference": "34fb0a7da0330df1bab4280fcac4afdeeccc3edf",
+                "url": "https://api.github.com/repos/predis/predis/zipball/4d91f3b08a60c3bacc2afbd8dc41724559b7626a",
+                "reference": "4d91f3b08a60c3bacc2afbd8dc41724559b7626a",
                 "shasum": ""
             },
             "require": {
@@ -3360,7 +3360,7 @@
             ],
             "support": {
                 "issues": "https://github.com/predis/predis/issues",
-                "source": "https://github.com/predis/predis/tree/v3.0.1"
+                "source": "https://github.com/predis/predis/tree/v3.7.0"
             },
             "funding": [
                 {
@@ -3368,7 +3368,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-16T18:30:32+00:00"
+            "time": "2026-10-08T16:46:04+00:00"
         },
         {
             "name": "psr/clock",
@@ -9143,5 +9143,5 @@
     "platform-overrides": {
         "php": "8.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
